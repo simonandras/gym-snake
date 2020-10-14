@@ -1,5 +1,5 @@
 import numpy as np
 
-def f():
+def xddd():
     print("asd")
 
