@@ -1,8 +1,13 @@
-import numpy as np
 
-def prnt():
-    print(0)
+from gym.envs.registration import register
 
-def xddd():
-    print("asd")
+register(
+    id='snake-v0',
+    entry_point='snake_foo.envs:SnakeEnv',
+)
+
+register(
+    id='snake-extrahard-v0',
+    entry_point='gym_snake.envs:SnakeExtraHardEnv',
+)
 
