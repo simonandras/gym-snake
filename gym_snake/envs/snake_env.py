@@ -4,20 +4,20 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 
 class SnakeEnv(gym.Env):
-  metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human']}
 
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
 
-  def step(self, action):
-    pass
+    def step(self, action):
+        pass
 
-  def reset(self):
-    pass
+    def reset(self):
+        pass
 
-  def render(self, mode='human'):
-    pass
+    def render(self, mode='human'):
+        print("asd")
 
-  def close(self):
-    pass
+    def close(self):
+        pass
 
