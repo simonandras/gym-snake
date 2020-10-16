@@ -3,6 +3,9 @@ import gym
 from gym import error, spaces, utils
 from gym.utils import seeding
 
+from utilities import test_asd
+
+
 class SnakeEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
@@ -10,7 +13,7 @@ class SnakeEnv(gym.Env):
         pass
 
     def step(self, action):
-        pass
+        test_asd()
 
     def reset(self):
         pass
