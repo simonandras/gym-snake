@@ -2,25 +2,28 @@
 import gym
 from gym import error, spaces, utils
 from gym.utils import seeding
+import numpy as np
 
-from utilities import test_asd
+from gym_snake.utilities.utils import asd1
 
 
 class SnakeEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self):
-        pass
+    def __init__(self, shape):
+        self.shape = shape
+        self.map = None
+        self.snake_body = None
 
     def step(self, action):
-        test_asd()
-
-    def reset(self):
         pass
 
+    def reset(self):
+        self.map = np.zeros(self.shape)
+        self.snake_body = np.zeros((4, 2))
+
     def render(self, mode='human'):
-        print("asd")
+        asd1()
 
     def close(self):
         pass
-
