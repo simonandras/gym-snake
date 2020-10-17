@@ -19,8 +19,8 @@ class Snake:
         self.snake_body = deque()
 
         # first add the head
-        self.snake_body.append(np.array(np.random.randint(self.map_shape[0]),
-                                        np.random.randint(self.map_shape[1])))
+        self.snake_body.append(np.array([np.random.randint(self.map_shape[0]),
+                                         np.random.randint(self.map_shape[1])]))
 
         # adds some valid part connected to the tail
         for _ in range(self.initial_length):
