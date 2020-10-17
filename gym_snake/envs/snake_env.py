@@ -19,11 +19,21 @@ class SnakeEnv(gym.Env):
         self.snake = Snake(map_shape=self.shape, initial_length=4)
 
         self.map = np.zeros(self.shape)
-        for part in self.snake.snake_body:
-            self.map[part[0], part[1]] = 1
+        for i, part in enumerate(self.snake.snake_body):
+            # head part
+            if i == 0:
+                self.map[part[0], part[1]] = 2
+            # body parts
+            else:
+                self.map[part[0], part[1]] = 1
 
     def render(self, mode='human'):
         print(self.map)
 
     def close(self):
         pass
+
+
+env = SnakeEnv(shape=(5, 5))
+env.reset()
+env.render()

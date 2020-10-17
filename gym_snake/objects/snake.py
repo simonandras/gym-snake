@@ -23,7 +23,7 @@ class Snake:
                                          np.random.randint(self.map_shape[1])]))
 
         # adds some valid part connected to the tail
-        for _ in range(self.initial_length):
+        for _ in range(self.initial_length - 1):
             self.random_add_part()
 
     def random_add_part(self) -> None:

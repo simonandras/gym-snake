@@ -23,10 +23,10 @@ def beside_each_other(x1, x2) -> bool:
     The first coordinate corresponds to the vertical axes
     """
 
-    if np.array_equal(x2, np.array([x1[0]+1, x[1]])) or \
-            np.array_equal(x2, np.array([x1[0]-1, x[1]])) or \
-            np.array_equal(x2, np.array([x1[0], x[1]+1])) or \
-            np.array_equal(x2, np.array([x1[0], x[1]-1])):
+    if np.array_equal(x2, np.array([x1[0]+1, x1[1]])) or \
+            np.array_equal(x2, np.array([x1[0]-1, x1[1]])) or \
+            np.array_equal(x2, np.array([x1[0], x1[1]+1])) or \
+            np.array_equal(x2, np.array([x1[0], x1[1]-1])):
         return True
     else:
         return False
@@ -39,4 +39,7 @@ def around(x) -> list:
     x: np.array([a, b])
     """
 
-    return [np.array(x[0]+1, x[1]), np.array(x[0]-1, x[1]), np.array(x[0], x[1]+1), np.array(x[0], x[1]-1)]
+    return [np.array([x[0]+1, x[1]]),
+            np.array([x[0]-1, x[1]]),
+            np.array([x[0], x[1]+1]),
+            np.array([x[0], x[1]-1])]
