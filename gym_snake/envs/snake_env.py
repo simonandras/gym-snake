@@ -1,10 +1,7 @@
 
-import gym
-from gym import error, spaces, utils
-from gym.utils import seeding
 import numpy as np
-
-from gym_snake.utilities.utils import asd1
+import gym
+from gym_snake.objects.snake import Snake
 
 
 class SnakeEnv(gym.Env):
@@ -13,17 +10,20 @@ class SnakeEnv(gym.Env):
     def __init__(self, shape):
         self.shape = shape
         self.map = None
-        self.snake_body = None
+        self.snake = None
 
     def step(self, action):
         pass
 
-    def reset(self):
+    def reset(self) -> None:
+        self.snake = Snake(map_shape=self.shape, initial_length=4)
+
         self.map = np.zeros(self.shape)
-        self.snake_body = np.zeros((4, 2))
+        for part in self.snake.snake_body:
+            self.map[part[0], part[1]] = 1
 
     def render(self, mode='human'):
-        asd1()
+        print(self.map)
 
     def close(self):
         pass
