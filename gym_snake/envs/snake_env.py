@@ -169,14 +169,12 @@ for i in range(10):
     print(i)
     env.render()
     print("...")
-    print(env.previous_map)
     if not env.done:
         a = env.action_space.sample()
         print(f"action: {a}")
         print(f"reward: {reward}")
         print("----------------")
         observation, reward, done, info = env.step(a)
-        print(observation)
     else:
         print(f"reward: {reward}")
         print("----------------")
