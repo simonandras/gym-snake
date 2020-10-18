@@ -20,7 +20,7 @@ class SnakeEnv(gym.Env):
     def __init__(self, shape: tuple, initial_snake_length: int = 4):
         self.shape = shape
         self.initial_snake_length = initial_snake_length
-        self.observation_space = gym.spaces.Box(low=0.0, high=1.0, shape=(2, shape[0], shape[1]), dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low=0.0, high=1.0, shape=shape, dtype=np.float32)
 
     def step(self, action: int) -> tuple:
         """
@@ -50,19 +50,12 @@ class SnakeEnv(gym.Env):
                 reward = 0.
             self.snake.update_direction()
             self.update_map(start=False)
-
-            # test this to avoid going around
-            if np.array_equal(self.map, self.previous_map):
-                reward = -1.
-
-            observation = np.array([self.map, self.previous_map])
         # out of bound or new_head intersects with the other body parts
         else:
             reward = -1.
             self.end_episode()
-            observation = None
 
-        return observation, reward, self.done, {}
+        return self.map, reward, self.done, {}
 
     def get_new_head(self, action: int) -> np.ndarray:
         """
