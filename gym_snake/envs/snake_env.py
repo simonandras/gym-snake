@@ -12,6 +12,7 @@ class SnakeEnv(gym.Env):
     action_space = gym.spaces.Discrete(3)
 
     map = None            # 2d np.array
+    previous_map = None
     snake = None          # Snake object
     food_location = None  # np.array([a, b])
     done = True           # status of the episode
@@ -19,7 +20,7 @@ class SnakeEnv(gym.Env):
     def __init__(self, shape: tuple, initial_snake_length: int = 4):
         self.shape = shape
         self.initial_snake_length = initial_snake_length
-        self.observation_space = gym.spaces.Box(low=0.0, high=1.0, shape=shape, dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low=0.0, high=1.0, shape=(2, shape[0], shape[1]), dtype=np.float32)
 
     def step(self, action: int) -> tuple:
         """
@@ -48,13 +49,15 @@ class SnakeEnv(gym.Env):
             else:
                 reward = 0.
             self.snake.update_direction()
-            self.update_map()
+            self.update_map(start=False)
+            observation = np.array([self.map, self.previous_map])
         # out of bound or new_head intersects with the other body parts
         else:
             reward = -1.
             self.end_episode()
+            observation = None
 
-        return self.map, reward, self.done, {}
+        return observation, reward, self.done, {}
 
     def get_new_head(self, action: int) -> np.ndarray:
         """
@@ -97,6 +100,7 @@ class SnakeEnv(gym.Env):
 
     def end_episode(self) -> None:
         self.map = None
+        self.previous_map = None
         self.snake = None
         self.food_location = None
         self.done = True
@@ -112,10 +116,10 @@ class SnakeEnv(gym.Env):
         self.create_food()
 
         # adding snake and food to the map
-        self.update_map()
+        self.update_map(start=True)
 
         # returning initial observation
-        return self.map
+        return np.array([self.map, self.previous_map])
 
     def create_food(self) -> None:
         while True:
@@ -125,17 +129,25 @@ class SnakeEnv(gym.Env):
                 self.food_location = new_food_location
                 break
 
-    def update_map(self) -> None:
+    def update_map(self, start: bool) -> None:
         """
-        First clears the map, then shows the actual snake and food on the map
+        Updates the observations (map, previous_map)
+
+        start: if True, then the previous map is set differently
         """
+
+        # save the map to the previous map
+        if start:
+            self.previous_map = np.zeros(self.shape, dtype=np.float32)
+        else:
+            self.previous_map = np.copy(self.map)
 
         # clear the map
         self.map = np.zeros(self.shape, dtype=np.float32)
 
         # show the snake on the map
-        for i, part in enumerate(self.snake.snake_body):
-            self.map[part[0], part[1]] = (i + 1) * (0.5 / self.snake.length)
+        for part in self.snake.snake_body:
+            self.map[part[0], part[1]] = 0.5
 
         # show the food on the map
         self.map[self.food_location[0], self.food_location[1]] = 1.0
@@ -158,12 +170,15 @@ reward = "start"
 for i in range(10):
     print(i)
     env.render()
+    print("...")
+    print(env.previous_map)
     if not env.done:
         a = env.action_space.sample()
         print(f"action: {a}")
         print(f"reward: {reward}")
         print("----------------")
         observation, reward, done, info = env.step(a)
+        print(observation)
     else:
         print(f"reward: {reward}")
         print("----------------")
