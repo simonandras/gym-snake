@@ -50,6 +50,11 @@ class SnakeEnv(gym.Env):
                 reward = 0.
             self.snake.update_direction()
             self.update_map(start=False)
+
+            # test this to avoid going around
+            if np.array_equal(self.map, self.previous_map):
+                reward = -1.
+
             observation = np.array([self.map, self.previous_map])
         # out of bound or new_head intersects with the other body parts
         else:
