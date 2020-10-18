@@ -96,7 +96,7 @@ class SnakeEnv(gym.Env):
                 return np.array([head[0], head[1] - 1])
 
     def end_episode(self) -> None:
-        self.map = None
+        self.map = self.map = np.zeros(self.shape, dtype=np.float32)
         self.snake = None
         self.food_location = None
         self.done = True
