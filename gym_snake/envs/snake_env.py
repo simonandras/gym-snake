@@ -134,7 +134,10 @@ class SnakeEnv(gym.Env):
 
         # show the snake on the map
         for i, part in enumerate(self.snake.snake_body):
-            self.map[part[0], part[1]] = 0.5
+            if i <= 1:
+                self.map[part[0], part[1]] = 0.75
+            else:
+                self.map[part[0], part[1]] = 0.5
 
         # show the food on the map
         self.map[self.food_location[0], self.food_location[1]] = 1.0
