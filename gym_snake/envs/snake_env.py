@@ -12,6 +12,7 @@ class SnakeEnv(gym.Env):
     action_space = gym.spaces.Discrete(3)
 
     map = None            # 2d np.array
+    previous_map = None
     snake = None          # Snake object
     food_location = None  # np.array([a, b])
     done = True           # status of the episode
@@ -19,7 +20,7 @@ class SnakeEnv(gym.Env):
     def __init__(self, shape: tuple, initial_snake_length: int = 4):
         self.shape = shape
         self.initial_snake_length = initial_snake_length
-        self.observation_space = gym.spaces.Box(low=0., high=1., shape=(shape[0], shape[1], 1), dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low=0., high=1., shape=(shape[0], shape[1], 2), dtype=np.float32)
 
     def step(self, action: int) -> tuple:
         """
@@ -54,7 +55,7 @@ class SnakeEnv(gym.Env):
             reward = -1.
             self.end_episode()
 
-        return self.map.reshape((self.shape[0], self.shape[1], 1)), reward, self.done, {}
+        return np.moveaxis(np.array([self.map, self.previous_map]), 0, -1), reward, self.done, {}
 
     def get_new_head(self, action: int) -> np.ndarray:
         """
@@ -96,7 +97,8 @@ class SnakeEnv(gym.Env):
                 return np.array([head[0], head[1] - 1])
 
     def end_episode(self) -> None:
-        self.map = self.map = np.zeros(self.shape, dtype=np.float32)
+        self.map = np.zeros(self.shape, dtype=np.float32)
+        self.previous_map = np.zeros(self.shape, dtype=np.float32)
         self.snake = None
         self.food_location = None
         self.done = True
@@ -115,7 +117,7 @@ class SnakeEnv(gym.Env):
         self.update_map(start=True)
 
         # returning initial observation
-        return self.map.reshape((self.shape[0], self.shape[1], 1))
+        return np.moveaxis(np.array([self.map, self.previous_map]), 0, -1)
 
     def create_food(self) -> None:
         while True:
@@ -131,6 +133,12 @@ class SnakeEnv(gym.Env):
 
         start: if True, then the previous map is set differently
         """
+
+        # update previous mao
+        if not start:
+            self.previous_map = np.copy(self.map)
+        else:
+            self.previous_map = np.zeros(self.shape, dtype=np.float32)
 
         # clear the map
         self.map = np.zeros(self.shape, dtype=np.float32)
@@ -154,7 +162,7 @@ class SnakeEnv(gym.Env):
 
 env = SnakeEnv(shape=(5, 5))
 observation = env.reset()
-print(observation)
+print(np.moveaxis(observation, -1, 0))
 print("----------------")
 
 reward = "start"
@@ -166,7 +174,7 @@ for i in range(10):
     observation, reward, done, info = env.step(a)
     print(f"action: {a}")
     print(f"reward: {reward}")
-    print(observation)
+    print(np.moveaxis(observation, -1, 0))
     print("----------------")
     if env.done:
         print("END")
