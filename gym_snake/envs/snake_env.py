@@ -7,7 +7,7 @@ from gym_snake.utilities.utils import array_in_collection
 
 class SnakeEnv(gym.Env):
     metadata = {'render.modes': ['human']}
-    reward_range = (-1., 1.)
+    reward_range = (-1., 100.)
 
     action_space = gym.spaces.Discrete(3)
 
@@ -19,7 +19,7 @@ class SnakeEnv(gym.Env):
     def __init__(self, shape: tuple, initial_snake_length: int = 4):
         self.shape = shape
         self.initial_snake_length = initial_snake_length
-        self.observation_space = gym.spaces.Box(low=0.0, high=1.0, shape=shape, dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low=0., high=1., shape=shape, dtype=np.float32)
 
     def step(self, action: int) -> tuple:
         """
@@ -46,7 +46,7 @@ class SnakeEnv(gym.Env):
                 self.create_food()
                 reward = 100.
             else:
-                reward = 0.
+                reward = -0.1
             self.snake.update_direction()
             self.update_map(start=False)
         # out of bound or new_head intersects with the other body parts
@@ -153,21 +153,22 @@ class SnakeEnv(gym.Env):
 
 
 env = SnakeEnv(shape=(5, 5))
-env.reset()
+observation = env.reset()
+print(observation)
+print("----------------")
 
 reward = "start"
 
 for i in range(10):
     print(i)
-    env.render()
-    print("...")
-    if not env.done:
-        a = env.action_space.sample()
-        print(f"action: {a}")
-        print(f"reward: {reward}")
-        print("----------------")
-        observation, reward, done, info = env.step(a)
-    else:
-        print(f"reward: {reward}")
-        print("----------------")
+    # env.render()
+    a = env.action_space.sample()
+    observation, reward, done, info = env.step(a)
+    print(f"action: {a}")
+    print(f"reward: {reward}")
+    print(observation)
+    print("----------------")
+    if env.done:
+        print("END")
         break
+
