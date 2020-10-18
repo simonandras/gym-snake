@@ -19,7 +19,7 @@ class SnakeEnv(gym.Env):
     def __init__(self, shape: tuple, initial_snake_length: int = 4):
         self.shape = shape
         self.initial_snake_length = initial_snake_length
-        self.observation_space = gym.spaces.Box(low=0., high=1., shape=(1, shape[0], shape[1]), dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low=0., high=1., shape=(shape[0], shape[1], 1), dtype=np.float32)
 
     def step(self, action: int) -> tuple:
         """
@@ -54,7 +54,7 @@ class SnakeEnv(gym.Env):
             reward = -1.
             self.end_episode()
 
-        return np.array([self.map]), reward, self.done, {}
+        return self.map.reshape((self.shape[0], self.shape[1], 1)), reward, self.done, {}
 
     def get_new_head(self, action: int) -> np.ndarray:
         """
@@ -115,7 +115,7 @@ class SnakeEnv(gym.Env):
         self.update_map(start=True)
 
         # returning initial observation
-        return np.array([self.map])
+        return self.map.reshape((self.shape[0], self.shape[1], 1))
 
     def create_food(self) -> None:
         while True:
