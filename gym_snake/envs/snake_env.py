@@ -45,7 +45,7 @@ class SnakeEnv(gym.Env):
                 self.snake.snake_body.append(tail)  # restore tail
                 self.snake.length += 1  # increase length
                 self.create_food()
-                reward = 1.
+                reward = 100.
             else:
                 reward = 0.
             self.snake.update_direction()
