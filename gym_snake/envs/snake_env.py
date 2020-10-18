@@ -42,6 +42,7 @@ class SnakeEnv(gym.Env):
             self.snake.snake_body.appendleft(new_head)
             if np.array_equal(self.food_location, new_head):
                 self.snake.snake_body.append(tail)  # restore tail
+                self.snake.length += 1  # increase length
                 self.create_food()
                 reward = 1.
             else:
@@ -134,10 +135,7 @@ class SnakeEnv(gym.Env):
 
         # show the snake on the map
         for i, part in enumerate(self.snake.snake_body):
-            if i <= 1:
-                self.map[part[0], part[1]] = 0.75
-            else:
-                self.map[part[0], part[1]] = 0.5
+            self.map[part[0], part[1]] = (i + 1) * (0.5 / self.snake.length)
 
         # show the food on the map
         self.map[self.food_location[0], self.food_location[1]] = 1.0
