@@ -12,7 +12,6 @@ class SnakeEnv(gym.Env):
     action_space = gym.spaces.Discrete(3)
 
     map = None            # 2d np.array
-    previous_map = None
     snake = None          # Snake object
     food_location = None  # np.array([a, b])
     done = True           # status of the episode
@@ -98,7 +97,6 @@ class SnakeEnv(gym.Env):
 
     def end_episode(self) -> None:
         self.map = None
-        self.previous_map = None
         self.snake = None
         self.food_location = None
         self.done = True
@@ -117,7 +115,7 @@ class SnakeEnv(gym.Env):
         self.update_map(start=True)
 
         # returning initial observation
-        return np.array([self.map, self.previous_map])
+        return self.map
 
     def create_food(self) -> None:
         while True:
@@ -129,16 +127,10 @@ class SnakeEnv(gym.Env):
 
     def update_map(self, start: bool) -> None:
         """
-        Updates the observations (map, previous_map)
+        Updates the observations
 
         start: if True, then the previous map is set differently
         """
-
-        # save the map to the previous map
-        if start:
-            self.previous_map = np.zeros(self.shape, dtype=np.float32)
-        else:
-            self.previous_map = np.copy(self.map)
 
         # clear the map
         self.map = np.zeros(self.shape, dtype=np.float32)
