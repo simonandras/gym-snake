@@ -54,7 +54,7 @@ class SnakeEnv(gym.Env):
             reward = -1.
             self.end_episode()
 
-        return np.array([self.map, self.previous_map]), reward, self.done, {}
+        return np.moveaxis(np.array([self.map, self.previous_map]), 0, 2), reward, self.done, {}
 
     def end_episode(self) -> None:
         self.map = np.zeros(self.shape, dtype=np.float32)
@@ -80,7 +80,7 @@ class SnakeEnv(gym.Env):
         self.update_map(start=True)
 
         # returning initial observation
-        return np.array([self.map, self.previous_map])
+        return np.moveaxis(np.array([self.map, self.previous_map]), 0, 2)
 
     def update_map(self, start: bool) -> None:
         """

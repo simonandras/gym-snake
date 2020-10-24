@@ -30,11 +30,18 @@ class SnakeDataGenerator:
         Generate one batch of data
         """
 
-        X = np.empty((self.batch_size, *self.shape))
+        X = np.empty((self.batch_size, *self.shape, 1))
 
         for i in range(self.batch_per_epoch):
             length = np.random.randint(low=4, high=self.max_snake_length)
             observation = self.env.reset(spec_reset=True, spec_snake_length=length)
-            X[i, ...] = observation[0, ...]
+            X[i, ...] = np.moveaxis(np.array([observation[0, ...]]), 0, 2)
 
         return X, X
+
+
+a = SnakeDataGenerator(shape=(5, 5))
+
+X, Y = a.__getitem__()
+print(X[0], X[0].shape, X.shape)
+
