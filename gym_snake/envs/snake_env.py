@@ -63,12 +63,15 @@ class SnakeEnv(gym.Env):
         self.food = None
         self.done = True
 
-    def reset(self) -> np.ndarray:
+    def reset(self, spec_reset: bool = False, spec_snake_length: int = 4) -> np.ndarray:
         # reset the episode done parameter
         self.done = False
 
         # creating random snake
-        self.snake = Snake(map_shape=self.shape, initial_length=self.initial_snake_length)
+        if spec_reset:
+            self.snake = Snake(map_shape=self.shape, initial_length=spec_snake_length)
+        else:
+            self.snake = Snake(map_shape=self.shape, initial_length=self.initial_snake_length)
 
         # creating random food
         self.food = Food(map_shape=self.shape, snake=self.snake)

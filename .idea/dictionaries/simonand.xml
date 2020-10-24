@@ -3,6 +3,9 @@
     <words>
       <w>crossentropy</w>
       <w>envs</w>
+      <w>keras</w>
+      <w>nesterov</w>
+      <w>preds</w>
       <w>relu</w>
       <w>sarsa</w>
       <w>softmax</w>

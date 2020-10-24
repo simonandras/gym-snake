@@ -56,12 +56,9 @@ class Snake:
             if self.valid_part(part, to_tail=True):
                 available_positions.append(i)
 
-        if not available_positions:
-            raise ValueError("Can't append new part to the snake's tail because all positions are invalid.")
-
-        position = available_positions[np.random.randint(len(available_positions))]
-
-        self.snake_body.append(parts_around[position])
+        if available_positions:
+            position = available_positions[np.random.randint(len(available_positions))]
+            self.snake_body.append(parts_around[position])
 
     def valid_part(self, part: np.ndarray, to_tail=False) -> bool:
         """
