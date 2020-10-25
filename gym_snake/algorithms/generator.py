@@ -1,16 +1,15 @@
 
 import numpy as np
-#import keras
+import keras
 from gym_snake.envs.snake_env import SnakeEnv
 
 
-# class SnakeDataGenerator(keras.utils.Sequence):
-class SnakeDataGenerator:
+class SnakeDataGenerator(keras.utils.Sequence):
     """
-    Generates random snake map data for Keras
+    Generates random snake map data for Keras encoder
     """
 
-    def __init__(self, bach_per_epoch=10, batch_size=32, shape=(10, 10)):
+    def __init__(self, bach_per_epoch=10, batch_size=16, shape=(32, 32)):
         self.batch_per_epoch = bach_per_epoch
         self.batch_size = batch_size
         self.shape = shape
@@ -25,23 +24,16 @@ class SnakeDataGenerator:
 
         return self.batch_per_epoch
 
-    def __getitem__(self):
+    def __getitem__(self, idx):
         """
         Generate one batch of data
         """
 
-        X = np.empty((self.batch_size, *self.shape, 1))
+        X = np.zeros((self.batch_size, 1, *self.shape))
 
-        for i in range(self.batch_per_epoch):
+        for i in range(self.batch_size):
             length = np.random.randint(low=4, high=self.max_snake_length)
             observation = self.env.reset(spec_reset=True, spec_snake_length=length)
-            X[i, ...] = np.moveaxis(np.array([observation[0, ...]]), 0, 2)
+            X[i, ...] = np.array([observation])
 
         return X, X
-
-
-a = SnakeDataGenerator(shape=(5, 5))
-
-X, Y = a.__getitem__()
-print(X[0], X[0].shape, X.shape)
-
