@@ -123,7 +123,7 @@ class Snake:
                 return np.array([head[0], head[1] - 1])
 
 
-class Food:
+class Apple:
 
     def __init__(self, map_shape: tuple, snake: Snake):
         self.map_shape = map_shape
