@@ -3,6 +3,9 @@ import random
 
 
 class Memory:
+    """
+    The previously experienced samples are stored and used for training
+    """
 
     def __init__(self, capacity: int):
         self.capacity = capacity

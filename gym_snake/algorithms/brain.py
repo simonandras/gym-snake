@@ -4,14 +4,17 @@ from keras.models import Model
 
 class Brain:
 
-    def __init__(self, state_shape: tuple, number_of_actions: int, alpha: float = 0.01,
-                 momentum: float = 0.0, nesterov=False):
+    def __init__(self, state_shape: tuple, number_of_actions: int,
+                 alpha: float = 0.01, momentum: float = 0.0, nesterov=False):
+
+        assert len(state_shape) == 3, "state_shape should be 3 dimensional tuple"
+
         # CNN shape parameters
-        self.state_shape = state_shape  # (..., 2)
+        self.state_shape = state_shape  # 3d
         self.number_of_actions = number_of_actions
 
         # SGD parameters
-        self.alpha = alpha
+        self.alpha = alpha  # learning rate
         self.momentum = momentum
         self.nesterov = nesterov
 
@@ -19,6 +22,8 @@ class Brain:
         self.model = self.create_model()
 
     def create_model(self) -> Model:
+
+        # channel last ordering in Keras
         input_x = Input(shape=self.state_shape)
 
         x = Conv2D(8, kernel_size=2, activation='relu', padding='same')(input_x)
