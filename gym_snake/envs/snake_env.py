@@ -27,7 +27,7 @@ class SnakeEnv(gym.Env):
 
         self.map = None            # 2d np.array
         self.snake = None          # Snake object
-        self.apple = None           # Apple object
+        self.apple = None          # Apple object
         self.done = True           # status of the episode
 
     def step(self, action: int) -> tuple:

@@ -4,14 +4,19 @@ from keras.models import Model
 
 class Brain:
 
-    def __init__(self, state_shape: tuple, number_of_actions: int,
-                 alpha: float = 0.01, momentum: float = 0.0, nesterov=False):
+    def __init__(self, input_shape: tuple, number_of_actions: int,
+                 batch_size: int, number_of_epochs: int,
+                 alpha: float, momentum: float, nesterov: bool):
 
-        assert len(state_shape) == 3, "state_shape should be 3 dimensional tuple"
+        assert len(input_shape) == 3, "input_shape should be 3 dimensional tuple"
 
         # CNN shape parameters
-        self.state_shape = state_shape  # 3d
+        self.input_shape = input_shape  # 3d
         self.number_of_actions = number_of_actions
+
+        # Training parameters
+        self.batch_size = batch_size
+        self.number_of_epochs = number_of_epochs
 
         # SGD parameters
         self.alpha = alpha  # learning rate
@@ -24,7 +29,7 @@ class Brain:
     def create_model(self) -> Model:
 
         # channel last ordering in Keras
-        input_x = Input(shape=self.state_shape)
+        input_x = Input(shape=self.input_shape)
 
         x = Conv2D(8, kernel_size=2, activation='relu', padding='same')(input_x)
         x = BatchNormalization()(x)
@@ -44,8 +49,8 @@ class Brain:
 
         return model
 
-    def train(self, X, y, epoch=1, batch_size=64, verbose=0):
-        self.model.fit(X, y, batch_size=batch_size, nb_epoch=epoch, verbose=verbose)
+    def train(self, X, y, verbose: int = 0):
+        self.model.fit(X, y, batch_size=self.batch_size, nb_epoch=self.number_of_epochs, verbose=verbose)
 
     def predict(self, states):
         return self.model.predict(states)

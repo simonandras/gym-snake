@@ -4,12 +4,15 @@
       <w>crossentropy</w>
       <w>envs</w>
       <w>keras</w>
+      <w>lmbd</w>
       <w>ndarray</w>
       <w>nesterov</w>
       <w>preds</w>
       <w>relu</w>
       <w>sarsa</w>
       <w>softmax</w>
+      <w>timestep</w>
+      <w>timesteps</w>
     </words>
   </dictionary>
 </component>

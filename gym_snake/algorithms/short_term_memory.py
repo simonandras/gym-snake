@@ -10,13 +10,14 @@ class ShortTermMemory:
     def __init__(self, capacity: int, observation_shape: tuple):
         self.capacity = capacity
         self.observation_shape = observation_shape
+        self.memory_shape = (self.capacity, *self.observation_shape)
 
         # initialize the memory with zeros
-        self.observations = np.zeros((capacity, *observation_shape))
+        self.observations = np.zeros(self.memory_shape)
 
     def update(self, observation: np.ndarray) -> None:
 
-        new_observations = np.zeros((capacity, *observation_shape))
+        new_observations = np.zeros(self.memory_shape)
         new_observations[:-1] = self.observations[1:]
         new_observations[-1] = observation
 
