@@ -76,8 +76,8 @@ class Agent:
         experiences = self.long_term_memory.sample(number_of_samples=replay_size)
         number_of_experiences = len(experiences)
 
-        states = numpy.array([i[0] for i in experiences])
-        new_states = numpy.array([i[3] for i in experiences])
+        states = np.array([i[0] for i in experiences])
+        new_states = np.array([i[3] for i in experiences])
 
         predictions_of_states = self.brain.predict(states)
         predictions_of_new_states = self.brain.predict(new_states)
