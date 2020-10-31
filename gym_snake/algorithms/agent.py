@@ -54,19 +54,22 @@ class Agent:
         else:
             return np.argmax(self.brain.predict_one(self.short_term_memory.observations))
 
-    def observe_first(self, observation) -> None:
+    def observe(self, observation: np.ndarray) -> np.ndarray:
         """
-        This method is used after the environment reset
+        observations: k dim
+        return: (k + 1) dim
         """
 
         self.short_term_memory.update(observation)
 
-    def observe(self, sample: tuple) -> None:
+        return self.short_term_memory.get()
+
+    def memorize(self, sample: tuple) -> None:
         """
-        One sample is stored as (observation, action, reward, new_observation)
+        One sample is stored as (state, action, reward, new_state)
+        state has the same shape as the short term memory shape
         """
 
-        self.short_term_memory.update(sample[3])
         self.long_term_memory.add(sample)
 
     def replay(self, replay_size: int, verbose: int = 0) -> None:
@@ -77,10 +80,6 @@ class Agent:
         number_of_experiences = len(experiences)
 
         states = np.array([i[0] for i in experiences])
-
-        print(states)
-        print(states.shape)
-        print(states[0])
 
         new_states = np.array([i[3] for i in experiences])
 
@@ -112,24 +111,26 @@ class Agent:
         self.brain.train(X, y, verbose=verbose)
 
     def learn(self, number_of_episodes: int, replay_size: int, verbose: int = 0):
+
         for episode in range(number_of_episodes):
             print(episode)
 
             observation = self.env.reset()
-            self.observe_first(observation)
+            experience = self.observe(observation)
 
             while True:
                 total_reward = 0.0
 
                 action = self.act(greedy=True)
 
-                new_observation, reward, done, info = self.env.step(action)
+                observation, reward, done, info = self.env.step(action)
+                new_experience = self.observe(observation)
 
-                self.observe((observation, action, reward, new_observation))
+                self.memorize((experience, action, reward, new_experience))
 
                 self.replay(replay_size=replay_size, verbose=verbose)
 
-                observation = new_observation
+                experience = new_experience
                 total_reward += reward
 
                 if done:
