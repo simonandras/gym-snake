@@ -77,6 +77,11 @@ class Agent:
         number_of_experiences = len(experiences)
 
         states = np.array([i[0] for i in experiences])
+
+        print(states)
+        print(states.shape)
+        print(states[0])
+
         new_states = np.array([i[3] for i in experiences])
 
         predictions_of_states = self.brain.predict(states)
