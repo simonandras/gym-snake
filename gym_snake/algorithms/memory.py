@@ -27,4 +27,4 @@ class Memory:
         Sampling without replacement
         """
         
-        return random.sample(self.samples, min(number_of_samples, self.capacity))
+        return random.sample(self.samples, min(number_of_samples, len(self.samples)))
