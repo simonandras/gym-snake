@@ -1,6 +1,6 @@
 
+from tensorflow.keras.layers import Input, Dense, Conv2D, Flatten, BatchNormalization
 from tensorflow.keras.models import Model
-from tensorflow.keras import Input
 
 
 class Brain:
