@@ -1,5 +1,6 @@
 
 from tensorflow.keras.layers import Input, Dense, Conv2D, Flatten, BatchNormalization
+from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.models import Model
 
 
