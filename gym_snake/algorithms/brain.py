@@ -1,5 +1,6 @@
 
-from keras.models import Model
+from tensorflow.keras.models import Model
+from tensorflow.keras import Input
 
 
 class Brain:
