@@ -1,4 +1,5 @@
 
+import numpy as np
 from gym_snake.envs.snake_env import SnakeEnv
 from gym_snake.algorithms.short_term_memory import ShortTermMemory
 from gym_snake.algorithms.memory import Memory
