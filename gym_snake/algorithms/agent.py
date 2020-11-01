@@ -67,7 +67,7 @@ class Agent:
     def memorize(self, sample: tuple) -> None:
         """
         One sample is stored as (state, action, reward, new_state)
-        state has the same shape as the short term memory shape
+        state has the same shape as the short term memory
         """
 
         self.long_term_memory.add(sample)
@@ -86,7 +86,7 @@ class Agent:
         predictions_of_states = self.brain.predict(states)
         predictions_of_new_states = self.brain.predict(new_states)
 
-        X = np.zeros((number_of_experiences, self.short_term_memory.memory_shape))
+        X = np.zeros((number_of_experiences, *self.short_term_memory.memory_shape))
         y = np.zeros((number_of_experiences, self.env.action_space.n))
 
         for i in range(number_of_experiences):
@@ -106,7 +106,7 @@ class Agent:
                 target[action] = reward + self.gamma * np.argmax(predictions_of_new_states[i])
 
             X[i] = state
-            x[i] = target
+            y[i] = target
 
         self.brain.train(X, y, verbose=verbose)
 
