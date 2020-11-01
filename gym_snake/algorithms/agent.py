@@ -52,7 +52,7 @@ class Agent:
             return self.env.action_space.sample()
         # Best action
         else:
-            return np.argmax(self.brain.predict_one(self.short_term_memory.observations))
+            return np.argmax(self.brain.predict_one(self.short_term_memory.get()))
 
     def observe(self, observation: np.ndarray) -> np.ndarray:
         """
