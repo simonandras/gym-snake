@@ -34,14 +34,15 @@ class Brain:
         # channel last ordering in Keras
         input_x = Input(shape=self.input_shape)
 
-        x = Conv2D(8, kernel_size=2, activation='relu', padding='same')(input_x)
+        x = Conv2D(16, kernel_size=3, activation='relu', padding='same')(input_x)
         x = BatchNormalization()(x)
 
-        x = Conv2D(16, kernel_size=2, activation='relu', padding='same')(x)
+        x = Conv2D(32, kernel_size=2, activation='relu', padding='same')(x)
         x = BatchNormalization()(x)
 
         x = Flatten()(x)
-        x = Dense(128, activation='relu')(x)
+        x = Dense(248, activation='relu')(x)
+        x = Dense(16, activation='relu')(x)
         output_x = Dense(3, activation='sigmoid')(x)
 
         model = Model(input_x, output_x)
