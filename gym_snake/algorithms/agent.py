@@ -132,6 +132,7 @@ class Agent:
                 self.replay(replay_size=replay_size, verbose=verbose)
 
                 experience = new_experience
+                episode_length += 1
                 total_reward += reward
 
                 if done:
