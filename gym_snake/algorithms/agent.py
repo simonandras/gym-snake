@@ -42,6 +42,10 @@ class Agent:
                            batch_size=self.batch_size, number_of_epochs=self.number_of_epochs,
                            alpha=self.alpha, momentum=self.momentum, nesterov=self.nesterov)
 
+        # Storing learning history
+        self.length_history = []
+        self.reward_history = []
+
     def act(self, greedy: bool = True) -> int:
         """
         The state is read from the short term memory
@@ -136,6 +140,8 @@ class Agent:
                 total_reward += reward
 
                 if done:
+                    self.length_history.append(episode_length)
+                    self.reward_history.append(total_reward)
                     print(f"Episode length: {episode_length}")
                     print(f"Total reward: {total_reward}")
                     break
