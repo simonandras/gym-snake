@@ -53,10 +53,10 @@ class Brain:
         output_x = Dense(3)(x)
 
         model = Model(input_x, output_x)
-        self.model.compile(optimizer=RMSprop(lr=self.lr,
-                                             rho=self.rho,
-                                             epsilon=self.epsilon),
-                           loss="mean_squared_error")
+        model.compile(optimizer=RMSprop(lr=self.lr,
+                                        rho=self.rho,
+                                        epsilon=self.epsilon),
+                      loss="mean_squared_error")
 
         return model
 

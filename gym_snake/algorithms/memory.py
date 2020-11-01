@@ -4,7 +4,7 @@ import random
 
 class Memory:
     """
-    The previously experienced samples are stored and used for training
+    The previous experiences are stored and used for training
     """
 
     def __init__(self, capacity: int):
@@ -14,7 +14,8 @@ class Memory:
 
     def add(self, experience: tuple) -> None:
         """
-        One sample is stored as (state, action, reward, new_state)
+        One experience is stored as (state, action, reward, new_state)
+        state and new_state has the short term memory output shape
         """
 
         self.experiences.append(experience)

@@ -75,7 +75,7 @@ class Agent:
 
     def memorize(self, experience: tuple) -> None:
         """
-        One experience sample is stored as (state, action, reward, new_state)
+        One experience is stored as (state, action, reward, new_state)
         state has the short term memory output shape
         """
 
@@ -83,7 +83,7 @@ class Agent:
 
     def replay(self, replay_size: int, verbose: int = 0) -> None:
 
-        # list of experience samples in format: (state, action, reward, new_state)
+        # One experience is stored as (state, action, reward, new_state)
         # state and new_state has the short term memory output shape
         experiences = self.long_term_memory.sample(number_of_samples=replay_size)
         number_of_experiences = len(experiences)
