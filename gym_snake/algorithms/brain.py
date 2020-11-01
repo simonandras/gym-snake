@@ -38,7 +38,7 @@ class Brain:
                    data_format='channels_first')(input_x)
         x = BatchNormalization()(x)
 
-        x = Conv2D(64, kernel_size=3, strides=(1, 1),
+        x = Conv2D(64, kernel_size=3, strides=(2, 2),
                    activation='relu', padding='same',
                    data_format='channels_first')(x)
         x = BatchNormalization()(x)
