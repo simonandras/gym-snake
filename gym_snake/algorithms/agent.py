@@ -115,12 +115,13 @@ class Agent:
         for episode in range(number_of_episodes):
             print(episode)
 
+            episode_length = 1
+            total_reward = 0.0
+
             observation = self.env.reset()
             experience = self.observe(observation)
 
             while True:
-                total_reward = 0.0
-
                 action = self.act(greedy=True)
 
                 observation, reward, done, info = self.env.step(action)
@@ -134,5 +135,6 @@ class Agent:
                 total_reward += reward
 
                 if done:
+                    print(f"Episode length: {episode_length}")
                     print(f"Total reward: {total_reward}")
                     break
