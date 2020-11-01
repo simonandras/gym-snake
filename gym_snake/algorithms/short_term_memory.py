@@ -25,3 +25,6 @@ class ShortTermMemory:
         new_state[-1] = observation
 
         self.state = new_state
+
+    def reset(self) -> None:
+        self.state = np.zeros(self.memory_shape)

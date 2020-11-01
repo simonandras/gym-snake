@@ -147,6 +147,8 @@ class Agent:
                 total_reward += reward
 
                 if done:
+                    self.short_term_memory.reset()
+
                     self.length_history.append(episode_length)
                     self.reward_history.append(total_reward)
                     print(f"Episode length: {episode_length}")
