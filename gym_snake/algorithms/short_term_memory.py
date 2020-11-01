@@ -29,4 +29,4 @@ class ShortTermMemory:
         Returns the memory content with channel last ordering
         """
 
-        return np.moveaxis(self.observations, -1, 0)
+        return np.moveaxis(self.observations, 0, -1)
