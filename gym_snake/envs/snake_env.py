@@ -23,7 +23,7 @@ class SnakeEnv(gym.Env):
 
         self.action_space = gym.spaces.Discrete(3)
         self.observation_space = gym.spaces.Box(low=0., high=1., shape=self.shape, dtype=np.float32)
-        self.reward_range = (-1., 1.)
+        self.reward_range = (-0.01, 1.)
 
         self.map = None            # 2d np.array
         self.snake = None          # Snake object
@@ -50,7 +50,7 @@ class SnakeEnv(gym.Env):
             self.update_map()
         # out of bound or new_head intersects with the other body parts
         else:
-            reward = -1.
+            reward = -0.01
             self.end_episode()
 
         return self.map, reward, self.done, {}
