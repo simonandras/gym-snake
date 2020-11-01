@@ -105,6 +105,8 @@ class Agent:
             else:
                 target[action] = reward + self.gamma * np.argmax(predictions_of_new_states[i])
 
+            print(X.shape, state.shape, y.shape, target)
+
             X[i] = state
             y[i] = target
 
