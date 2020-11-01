@@ -53,7 +53,7 @@ class Brain:
         return model
 
     def train(self, X, y, verbose: int = 0):
-        self.model.fit(X, y, batch_size=self.batch_size, nb_epoch=self.number_of_epochs, verbose=verbose)
+        self.model.fit(X, y, batch_size=self.batch_size, epochs=self.number_of_epochs, verbose=verbose)
 
     def predict(self, states):
         return self.model.predict(states)
