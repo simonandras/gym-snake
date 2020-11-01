@@ -10,7 +10,8 @@ class ShortTermMemory:
     def __init__(self, capacity: int, observation_shape: tuple):
         self.capacity = capacity
         self.observation_shape = observation_shape
-        self.memory_shape = (self.capacity, *self.observation_shape)
+        self.memory_shape = (self.capacity, *self.observation_shape)  # channel first
+        self.memory_output_shape = (*self.observation_shape, self.capacity)  # channel last
 
         # initialize the memory with zeros
         self.observations = np.zeros(self.memory_shape)
