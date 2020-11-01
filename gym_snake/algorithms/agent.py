@@ -37,7 +37,7 @@ class Agent:
         self.short_term_memory = ShortTermMemory(capacity=self.short_term_memory_capacity,
                                                  observation_shape=self.env.shape)
         self.long_term_memory = Memory(capacity=self.long_term_memory_capacity)
-        self.brain = Brain(input_shape=self.short_term_memory.memory_shape,
+        self.brain = Brain(input_shape=self.short_term_memory.memory_output_shape,
                            number_of_actions=self.env.action_space.n,
                            batch_size=self.batch_size, number_of_epochs=self.number_of_epochs,
                            alpha=self.alpha, momentum=self.momentum, nesterov=self.nesterov)
@@ -82,8 +82,6 @@ class Agent:
         states = np.array([i[0] for i in experiences])
 
         new_states = np.array([i[3] for i in experiences])
-
-        print(states.shape)
 
         predictions_of_states = self.brain.predict(states)
         predictions_of_new_states = self.brain.predict(new_states)
