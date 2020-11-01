@@ -11,6 +11,7 @@
       <w>relu</w>
       <w>sarsa</w>
       <w>softmax</w>
+      <w>sprop</w>
       <w>timestep</w>
       <w>timesteps</w>
     </words>

@@ -10,21 +10,21 @@ class Memory:
     def __init__(self, capacity: int):
         self.capacity = capacity
 
-        self.samples = []
+        self.experiences = []
 
-    def add(self, sample: tuple) -> None:
+    def add(self, experience: tuple) -> None:
         """
         One sample is stored as (state, action, reward, new_state)
         """
 
-        self.samples.append(sample)
+        self.experiences.append(experience)
 
-        if len(self.samples) > self.capacity:
-            self.samples.pop(0)
+        if len(self.experiences) > self.capacity:
+            self.experiences.pop(0)
 
     def sample(self, number_of_samples: int) -> list:
         """
         Sampling without replacement
         """
         
-        return random.sample(self.samples, min(number_of_samples, len(self.samples)))
+        return random.sample(self.experiences, min(number_of_samples, len(self.experiences)))
