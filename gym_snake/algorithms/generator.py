@@ -16,6 +16,7 @@ class SnakeDataGenerator(keras.utils.Sequence):
         self.shape = shape
         self.enlargement = enlargement
 
+        self.enlarged_shape = (self.enlargement * self.shape[1], self.enlargement * self.shape[1])
         self.max_snake_length = shape[0] * shape[1]
         self.env = SnakeEnv(shape=self.shape, enlargement=self.enlargement)
 
@@ -31,7 +32,7 @@ class SnakeDataGenerator(keras.utils.Sequence):
         Generate one batch of data
         """
 
-        X = np.zeros((self.batch_size, 1, *self.shape))
+        X = np.zeros((self.batch_size, 1, *self.enlarged_shape))
 
         for i in range(self.batch_size):
             length = np.random.randint(low=4, high=self.max_snake_length)
