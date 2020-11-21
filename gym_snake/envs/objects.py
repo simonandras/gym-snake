@@ -8,8 +8,10 @@ from gym_snake.utilities.utils import xor, array_in_collection
 class Snake:
 
     def __init__(self, map_shape: tuple, initial_length: int):
-        self.map_shape = map_shape
+
         assert map_shape[0] >= 5 and map_shape[1] >= 5, "The map size should be at least 5x5"
+
+        self.map_shape = map_shape
         self.initial_length = initial_length
 
         self.length = None

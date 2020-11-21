@@ -10,6 +10,7 @@ class SnakeDataGenerator(keras.utils.Sequence):
     """
 
     def __init__(self, bach_per_epoch=10, batch_size=16, shape=(32, 32)):
+
         self.batch_per_epoch = bach_per_epoch
         self.batch_size = batch_size
         self.shape = shape
@@ -34,6 +35,6 @@ class SnakeDataGenerator(keras.utils.Sequence):
         for i in range(self.batch_size):
             length = np.random.randint(low=4, high=self.max_snake_length)
             observation = self.env.reset(spec_reset=True, spec_snake_length=length)
-            X[i, ...] = np.array([observation])
+            X[i] = np.array([observation])
 
         return X, X

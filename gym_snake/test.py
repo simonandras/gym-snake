@@ -1,9 +1,10 @@
 
 import numpy as np
 from gym_snake.envs.snake_env import SnakeEnv
+from gym_snake.utilities.utils import increase_resolution
 
 
-env = SnakeEnv(shape=(5, 5))
+env = SnakeEnv(shape=(5, 5), initial_snake_length=4, enlargement=2)
 observation = env.reset()
 print(observation)
 print("----------------")

@@ -13,10 +13,10 @@ class Agent:
     Experience: (state, action, reward, new_state); get form long term memory
     """
 
-    def __init__(self, env: SnakeEnv, long_term_memory_capacity: int = 1_000_000, short_term_memory_capacity: int = 2,
-                 exploration_fraction: float = 0.15, gamma: float = 0.99,
+    def __init__(self, env: SnakeEnv, long_term_memory_capacity: int = 100_000, short_term_memory_capacity: int = 2,
+                 exploration_fraction: float = 0.15, gamma: float = 0.95,
                  batch_size: int = 32, number_of_epochs: int = 1,
-                 lr: float = 0.00025, rho: float = 0.95, epsilon: float = 0.01):
+                 lr: float = 0.0001, rho: float = 0.95, epsilon: float = 0.01):
 
         # SnakeEnv
         self.env = env
