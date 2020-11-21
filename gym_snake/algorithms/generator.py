@@ -16,7 +16,7 @@ class SnakeDataGenerator(keras.utils.Sequence):
         self.shape = shape
         self.enlargement = enlargement
 
-        self.enlarged_shape = (self.enlargement * self.shape[1], self.enlargement * self.shape[1])
+        self.enlarged_shape = (self.enlargement * self.shape[0], self.enlargement * self.shape[1])
         self.max_snake_length = shape[0] * shape[1]
         self.env = SnakeEnv(shape=self.shape, enlargement=self.enlargement)
 
