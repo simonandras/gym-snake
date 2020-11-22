@@ -1,8 +1,5 @@
 # gym-snake
 
-### First Milestone
+### Second Milestone
 
-The first milestone was the own OpenAI Gym environment. The content of this is all the files except the files in the "Algorithms" folder. 
-The environment is a snake game environment with adjustable shape. The code documentation is not ready yet. The env can be used as showed in the test.py, but it can be also used with the OpenAI function too: "env = gym.make('snake-v0', shape=(40, 40))".
-
-I plan to implement some agents to the next milestone and compare their performance. 
+The DQN angent is implemented in the algorithms folder. There is a training process in the rf_agent_test.ipynb, but unfortunately it perfoms poorly for now. I think the problem is with the model: i have to use an autoencoder (possibly a vae) to create state representation and the RL model should only use this representation for learing the policy. If this works, then i will implement the double learning version of the current model. Some other improvements can also be used. The documentation is not ready for now, and i have to do some experiment to solve the problem properly.
