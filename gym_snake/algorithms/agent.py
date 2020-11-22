@@ -100,8 +100,6 @@ class Agent:
         new_states = np.array([no_state if i[3] is None else i[3] for i in experiences], dtype=np.float32)
 
         predictions_of_states = self.brain.predict(states)
-        print("asd")
-        print(new_states)
         predictions_of_new_states = self.brain.predict(new_states)
 
         X = np.zeros((number_of_experiences, self.short_term_memory.memory_length))
