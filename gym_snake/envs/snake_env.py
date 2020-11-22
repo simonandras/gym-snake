@@ -100,11 +100,11 @@ class SnakeEnv(gym.Env):
         for i, part in enumerate(self.snake.snake_body):
             # show the head of the snake on the map
             if i == 0:
-                self.map[part[0], part[1]] = 1.
+                self.map[part[0], part[1]] = 0.75
 
             # show the other parts of the snake on the map
             else:
-                self.map[part[0], part[1]] = 1.
+                self.map[part[0], part[1]] = 0.5
 
         # show the apple on the map
         self.map[self.apple.location[0], self.apple.location[1]] = 1.
