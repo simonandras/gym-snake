@@ -3,29 +3,26 @@ import numpy as np
 
 
 class ShortTermMemory:
-    """
-    Stores the last observations in a 3 dimensional channel first np.ndarray
-    """
 
-    def __init__(self, capacity: int, observation_shape: tuple):
+    def __init__(self, capacity: int, latent_vector_length: int):
 
         self.capacity = capacity
-        self.observation_shape = observation_shape
-        self.memory_shape = (self.capacity, *self.observation_shape)  # channel first
+        self.latent_vector_length = latent_vector_length  # length of the encoded observation
+        self.memory_length = self.capacity * self.latent_vector_length
 
         # initialize the memory with zeros
-        self.state = np.zeros(self.memory_shape)
+        self.state = np.zeros(self.memory_length)
 
-    def update(self, observation: np.ndarray) -> None:
+    def update(self, encoded_observation: np.ndarray) -> None:
         """
-        observation: get from the env
+        encoded_observation: 1 dim, the env observation encoded
         """
 
-        new_state = np.zeros(self.memory_shape)
-        new_state[:-1] = self.state[1:]
-        new_state[-1] = observation
+        new_state = np.zeros(self.memory_length)
+        new_state[:(-1)*self.latent_vector_length] = self.state[self.latent_vector_length:]
+        new_state[(-1)*self.latent_vector_length:] = encoded_observation
 
         self.state = new_state
 
     def reset(self) -> None:
-        self.state = np.zeros(self.memory_shape)
+        self.state = np.zeros(self.memory_length)

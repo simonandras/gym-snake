@@ -16,7 +16,8 @@ class Memory:
     def add(self, experience: tuple) -> None:
         """
         One experience is stored as (state, action, reward, new_state)
-        state and new_state has the short term memory output shape
+        state has short term memory memory_length
+        new_state is None in case of terminal state
         """
 
         self.experiences.append(experience)

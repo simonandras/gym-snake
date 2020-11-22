@@ -7,14 +7,12 @@ from tensorflow.keras.models import Model
 
 class Brain:
 
-    def __init__(self, input_shape: tuple, number_of_actions: int,
+    def __init__(self, input_length: int, number_of_actions: int,
                  batch_size: int, number_of_epochs: int,
                  lr: float, rho: float, epsilon: float):
 
-        assert len(input_shape) == 3, "input_shape should be 3 dimensional tuple"
-
-        # CNN shape parameters
-        self.input_shape = input_shape  # 3d, same as the short term memory output shape (channel first)
+        # NN shape parameters
+        self.input_length = input_length  # The short term memory memory_length
         self.number_of_actions = number_of_actions
 
         # Training parameters
@@ -26,33 +24,19 @@ class Brain:
         self.rho = rho
         self.epsilon = epsilon
 
-        # Create Keras model
+        # Used for encoding the observations
+        self.encoder_model = None
+
+        # Used for predicting action values
         self.model = self.create_model()
 
     def create_model(self) -> Model:
+        inp = Input((self.input_length,))
+        x = Dense(32, activation='relu')(inp)
+        output = Dense(self.number_of_actions)(x)
 
-        input_x = Input(shape=self.input_shape)
+        model = Model(inp, output)
 
-        x = Conv2D(32, kernel_size=4, strides=(2, 2),
-                   activation='relu', padding='same',
-                   data_format='channels_first')(input_x)
-        x = BatchNormalization()(x)
-
-        x = Conv2D(64, kernel_size=3, strides=(2, 2),
-                   activation='relu', padding='same',
-                   data_format='channels_first')(x)
-        x = BatchNormalization()(x)
-
-        x = Conv2D(64, kernel_size=2, strides=(1, 1),
-                   activation='relu', padding='same',
-                   data_format='channels_first')(x)
-        x = BatchNormalization()(x)
-
-        x = Flatten()(x)
-        x = Dense(512, activation='relu')(x)
-        output_x = Dense(3)(x)
-
-        model = Model(input_x, output_x)
         model.compile(optimizer=RMSprop(lr=self.lr,
                                         rho=self.rho,
                                         epsilon=self.epsilon),
@@ -68,3 +52,12 @@ class Brain:
 
     def predict_one(self, state):
         return self.predict(np.array([state]))[0]
+
+    def encode_one(self, observation):
+        """
+        observation: comes from the env; shape: (m, n)
+        predict needs shape (1, 1, m, n)
+        the last of the predictions are the encoded array of one array
+        finally sample the one element of the array
+        """
+        return self.encoder_model.predict(np.array([np.array([observation])]))[-1][0]
