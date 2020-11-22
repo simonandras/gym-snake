@@ -94,7 +94,7 @@ class Agent:
         experiences = self.long_term_memory.sample(number_of_samples=replay_size)
         number_of_experiences = len(experiences)
 
-        no_state = numpy.zeros(self.latent_vector_length)
+        no_state = np.zeros(self.latent_vector_length)
 
         states = np.array([i[0] for i in experiences])
         new_states = np.array([no_state if i[3] is None else i[3] for i in experiences])
