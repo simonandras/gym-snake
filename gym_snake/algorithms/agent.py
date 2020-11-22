@@ -15,7 +15,7 @@ class Agent:
 
     def __init__(self, env: SnakeEnv, long_term_memory_capacity: int = 100_000, short_term_memory_capacity: int = 2,
                  latent_vector_length: int = 64,
-                 exploration_fraction: float = 0.15, gamma: float = 0.95,
+                 min_exp_ratio: float = 0.01, max_exp_ratio: float = 1.0, decay: float = 0.001, gamma: float = 0.95,
                  batch_size: int = 32, number_of_epochs: int = 1,
                  lr: float = 0.0001, rho: float = 0.95, epsilon: float = 0.01):
 
@@ -30,7 +30,10 @@ class Agent:
         self.latent_vector_length = latent_vector_length
 
         # Reinforcement learning parameters
-        self.exploration_fraction = exploration_fraction  # the probability of exploration
+        self.min_exp_ratio = min_exp_ratio
+        self.max_exp_ratio = max_exp_ratio
+        self.exploration_ratio = self.max_exp_ratio  # the probability of exploration
+        self.decay = decay
         self.gamma = gamma  # discount parameter
 
         # Training parameters
@@ -51,6 +54,9 @@ class Agent:
                            batch_size=self.batch_size, number_of_epochs=self.number_of_epochs,
                            lr=self.lr, rho=self.rho, epsilon=self.epsilon)
 
+        # Count the number of steps
+        self.steps = 0
+
         # Storing learning history
         self.length_history = []
         self.reward_history = []
@@ -61,7 +67,7 @@ class Agent:
         """
 
         # random action
-        if greedy and np.random.rand() < self.exploration_fraction:
+        if greedy and np.random.rand() < self.exploration_ratio:
             return self.env.action_space.sample()
 
         # Best action
@@ -75,8 +81,14 @@ class Agent:
         """
 
         self.short_term_memory.update(encoded_observation)
+        self.steps += 1
+        self.update_exploration_ratio()
 
         return self.short_term_memory.state
+
+    def update_exploration_ratio(self):
+        self.exploration_ratio = self.min_exp_ratio + \
+                                 (self.max_exp_ratio - self.min_exp_ratio) * math.exp((-1)*self.decay * self.steps)
 
     def memorize(self, experience: tuple) -> None:
         """
