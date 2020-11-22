@@ -88,7 +88,7 @@ class Agent:
 
     def update_exploration_ratio(self):
         self.exploration_ratio = self.min_exp_ratio + \
-                                 (self.max_exp_ratio - self.min_exp_ratio) * math.exp((-1)*self.decay * self.steps)
+                                 (self.max_exp_ratio - self.min_exp_ratio) * np.exp((-1)*self.decay * self.steps)
 
     def memorize(self, experience: tuple) -> None:
         """
