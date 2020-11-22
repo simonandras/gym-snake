@@ -131,7 +131,7 @@ class Agent:
 
             # new_state is non-terminal
             else:
-                target[action] = reward + self.gamma * np.argmax(predictions_of_new_states[i])
+                target[action] = reward + self.gamma * np.max(predictions_of_new_states[i])
 
             X[i] = state
             y[i] = target
