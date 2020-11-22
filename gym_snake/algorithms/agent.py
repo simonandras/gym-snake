@@ -94,12 +94,14 @@ class Agent:
         experiences = self.long_term_memory.sample(number_of_samples=replay_size)
         number_of_experiences = len(experiences)
 
-        no_state = np.zeros(self.latent_vector_length)
+        no_state = np.zeros(self.short_term_memory.memory_length)
 
-        states = np.array([i[0] for i in experiences])
-        new_states = np.array([no_state if i[3] is None else i[3] for i in experiences])
+        states = np.array([i[0] for i in experiences], dtype=np.float32)
+        new_states = np.array([no_state if i[3] is None else i[3] for i in experiences], dtype=np.float32)
 
         predictions_of_states = self.brain.predict(states)
+        print("asd")
+        print(new_states)
         predictions_of_new_states = self.brain.predict(new_states)
 
         X = np.zeros((number_of_experiences, self.short_term_memory.memory_length))
