@@ -32,7 +32,8 @@ class Brain:
 
     def create_model(self) -> Model:
         inp = Input((self.input_length,))
-        x = Dense(32, activation='relu')(inp)
+        #, activation='relu'
+        x = Dense(32)(inp)
         output = Dense(self.number_of_actions)(x)
 
         model = Model(inp, output)

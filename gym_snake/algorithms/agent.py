@@ -66,7 +66,7 @@ class Agent:
         The state is read from the short term memory
         """
 
-        # random action
+        # Random action
         if greedy and np.random.rand() < self.exploration_ratio:
             return self.env.action_space.sample()
 
@@ -123,9 +123,6 @@ class Agent:
             target = predictions_of_states[i]
 
             # new_state is terminal state
-            # The observation is the zero array in case of termination
-            # The last channel of the state is the last most recent observation
-            # The state has channel first ordering
             if new_state is None:
                 target[action] = reward
 
