@@ -33,7 +33,7 @@ class Brain:
     def create_model(self) -> Model:
         inp = Input((self.input_length,))
         x = Dense(32)(inp, activation='relu')
-        output = Dense(self.number_of_actions, activation='relu')(x)
+        output = Dense(self.number_of_actions, activation='sigmoid')(x)
 
         model = Model(inp, output)
 
