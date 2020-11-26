@@ -2,7 +2,7 @@
 import numpy as np
 import gym
 from gym_snake.envs.objects import Snake, Apple
-from gym_snake.utilities.utils import array_in_collection
+from gym_snake.utilities.utils import array_in_collection, increase_resolution
 
 
 class SnakeEnv(gym.Env):
@@ -15,14 +15,22 @@ class SnakeEnv(gym.Env):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, shape: tuple, initial_snake_length: int = 4):
-        self.shape = shape
+    def __init__(self, shape: tuple, initial_snake_length: int = 4, enlargement: int = 1):
+
         assert shape[0] >= 5 and shape[1] >= 5, "The map size should be at least 5x5"
-        self.initial_snake_length = initial_snake_length
         assert initial_snake_length >= 2, "The initial snake length should be at least 2"
+        assert isinstance(enlargement, int), "enlargement should be int"
+        assert enlargement > 0, "enlargement should be positive"
+
+        self.shape = shape  # shape of the map
+        self.initial_snake_length = initial_snake_length
+        self.enlargement = enlargement  # the enlarged map is the observation
 
         self.action_space = gym.spaces.Discrete(3)
-        self.observation_space = gym.spaces.Box(low=0., high=1., shape=self.shape, dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low=0., high=1.,
+                                                shape=(self.enlargement * self.shape[0],
+                                                       self.enlargement * self.shape[1]),
+                                                dtype=np.float32)
         self.reward_range = (-0.01, 1.)
 
         self.map = None            # 2d np.array
@@ -48,12 +56,13 @@ class SnakeEnv(gym.Env):
                 reward = 0.
             self.snake.update_direction()
             self.update_map()
+
         # out of bound or new_head intersects with the other body parts
         else:
             reward = -0.01
             self.end_episode()
 
-        return self.map, reward, self.done, {}
+        return increase_resolution(self.map, self.enlargement), reward, self.done, {}
 
     def end_episode(self) -> None:
         self.map = np.zeros(self.shape, dtype=np.float32)
@@ -78,7 +87,7 @@ class SnakeEnv(gym.Env):
         self.update_map()
 
         # returning initial observation
-        return self.map
+        return increase_resolution(self.map, self.enlargement)
 
     def update_map(self) -> None:
         """
@@ -88,16 +97,21 @@ class SnakeEnv(gym.Env):
         # clear the map
         self.map = np.zeros(self.shape, dtype=np.float32)
 
-        # show the snake on the map
-        for part in self.snake.snake_body:
-            self.map[part[0], part[1]] = 1.
+        for i, part in enumerate(self.snake.snake_body):
+            # show the head of the snake on the map
+            if i == 0:
+                self.map[part[0], part[1]] = 0.75
+
+            # show the other parts of the snake on the map
+            else:
+                self.map[part[0], part[1]] = 0.5
 
         # show the apple on the map
         self.map[self.apple.location[0], self.apple.location[1]] = 1.
 
     def render(self, mode='human') -> None:
         if not self.done:
-            print(self.map)
+            print(increase_resolution(self.map, self.enlargement))
         else:
             print("The episode has ended")
 

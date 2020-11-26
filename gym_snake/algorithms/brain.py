@@ -33,23 +33,17 @@ class Brain:
 
         input_x = Input(shape=self.input_shape)
 
-        x = Conv2D(32, kernel_size=4, strides=(2, 2),
-                   activation='relu', padding='same',
+        x = Conv2D(16, kernel_size=8, strides=(4, 4),
+                   activation='relu',
                    data_format='channels_first')(input_x)
         x = BatchNormalization()(x)
 
-        x = Conv2D(64, kernel_size=3, strides=(2, 2),
-                   activation='relu', padding='same',
+        x = Conv2D(32, kernel_size=4, strides=(2, 2),
+                   activation='relu',
                    data_format='channels_first')(x)
-        x = BatchNormalization()(x)
-
-        x = Conv2D(64, kernel_size=2, strides=(1, 1),
-                   activation='relu', padding='same',
-                   data_format='channels_first')(x)
-        x = BatchNormalization()(x)
 
         x = Flatten()(x)
-        x = Dense(512, activation='relu')(x)
+        x = Dense(256)(x)
         output_x = Dense(3)(x)
 
         model = Model(input_x, output_x)
