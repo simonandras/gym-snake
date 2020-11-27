@@ -26,11 +26,9 @@ class SnakeEnv(gym.Env):
         self.initial_snake_length = initial_snake_length
         self.enlargement = enlargement  # the enlarged map is the observation
 
+        self.observation_shape = (self.enlargement * self.shape[0], self.enlargement * self.shape[1])
         self.action_space = gym.spaces.Discrete(3)
-        self.observation_space = gym.spaces.Box(low=0., high=1.,
-                                                shape=(self.enlargement * self.shape[0],
-                                                       self.enlargement * self.shape[1]),
-                                                dtype=np.float32)
+        self.observation_space = gym.spaces.Box(low=0., high=1., shape=self.observation_shape, dtype=np.float32)
         self.reward_range = (-0.01, 1.)
 
         self.map = None            # 2d np.array
