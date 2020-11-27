@@ -3,7 +3,7 @@ import numpy as np
 from gym_snake.envs.snake_env import SnakeEnv
 
 
-env = SnakeEnv(shape=(5, 5), initial_snake_length=4, enlargement=2)
+env = SnakeEnv(shape=(8, 8), initial_snake_length=4, enlargement=10)
 observation = env.reset()
 print(observation)
 print("----------------")
@@ -14,7 +14,7 @@ for i in range(10):
     observation, reward, done, info = env.step(action)
     print(f"action: {action}")
     print(f"reward: {reward}")
-    print(observation)
+    print(observation, observation.shape)
     if env.done:
         print("END")
         break
