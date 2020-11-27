@@ -40,7 +40,7 @@ class Agent:
 
         # Create memory and Keras CNN model
         self.short_term_memory = ShortTermMemory(capacity=self.short_term_memory_capacity,
-                                                 observation_shape=self.env.shape)
+                                                 observation_shape=self.env.observation_shape)
         self.long_term_memory = Memory(capacity=self.long_term_memory_capacity)
         self.brain = Brain(input_shape=self.short_term_memory.memory_shape,
                            number_of_actions=self.env.action_space.n,
