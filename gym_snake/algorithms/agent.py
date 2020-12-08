@@ -4,6 +4,7 @@ from gym_snake.envs.snake_env import SnakeEnv
 from gym_snake.algorithms.short_term_memory import ShortTermMemory
 from gym_snake.algorithms.memory import Memory
 from gym_snake.algorithms.brain import Brain
+from gym_snake.utilities.utils import rotate_times, mirror
 
 
 class Agent:
@@ -72,10 +73,22 @@ class Agent:
 
     def memorize(self, experience: tuple) -> None:
         """
+        Store the experience and its transformations
         One experience is stored as (state, action, reward, new_state)
         """
 
         self.long_term_memory.add(experience)
+
+        state, action, reward, new_state = experience
+
+        # In case of rotation, the actions do not changes
+        self.long_term_memory.add((rotate_times(state, 1), action, reward, rotate_times(new_state, 1)))
+        self.long_term_memory.add((rotate_times(state, 2), action, reward, rotate_times(new_state, 2)))
+        self.long_term_memory.add((rotate_times(state, 3), action, reward, rotate_times(new_state, 3)))
+
+        # In case of mirroring the right and left actions are interchanged
+        self.long_term_memory.add((mirror(state, axis=0), action, 2 - reward, mirror(new_state, axis=0)))
+        self.long_term_memory.add((mirror(state, axis=1), action, 2 - reward, mirror(new_state, axis=1)))
 
     def update_exploration_ratio(self):
         self.exploration_ratio = self.min_exp_ratio + \

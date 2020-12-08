@@ -17,6 +17,7 @@ class SnakeEnv(gym.Env):
 
     def __init__(self, shape: tuple, initial_snake_length: int = 4, enlargement: int = 1):
 
+        assert shape[0] == shape[1], "The map should be square shaped"
         assert initial_snake_length + 1 <= shape[0] * shape[1], "Snake is too long for this map shape"
         assert initial_snake_length >= 2, "The initial snake length should be at least 2"
         assert isinstance(enlargement, int), "enlargement should be int"

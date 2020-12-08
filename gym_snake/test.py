@@ -5,7 +5,7 @@ from gym_snake.envs.snake_env import SnakeEnv
 
 env = SnakeEnv(shape=(2, 2), initial_snake_length=2, enlargement=2)
 observation = env.reset()
-print(observation)
+print(observation, '\n')
 print("----------------")
 
 for i in range(10):
