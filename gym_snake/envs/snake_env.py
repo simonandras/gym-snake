@@ -30,7 +30,7 @@ class SnakeEnv(gym.Env):
         self.observation_shape = (self.enlargement * self.shape[0], self.enlargement * self.shape[1])
         self.action_space = gym.spaces.Discrete(3)
         self.observation_space = gym.spaces.Box(low=0., high=1., shape=self.observation_shape, dtype=np.float32)
-        self.reward_range = (-0.01, 1.)
+        self.reward_range = (-1., 1.)
 
         self.map = None            # 2d np.array
         self.snake = None          # Snake object
@@ -72,7 +72,7 @@ class SnakeEnv(gym.Env):
 
         # out of bound or new_head intersects with the other body parts
         else:
-            reward = -0.01
+            reward = -1.
             self.end_episode()
 
         return increase_resolution(self.map, self.enlargement), reward, self.done, {}
@@ -113,11 +113,11 @@ class SnakeEnv(gym.Env):
         for i, part in enumerate(self.snake.snake_body):
             # show the head of the snake on the map
             if i == 0:
-                self.map[part[0], part[1]] = 0.75
+                self.map[part[0], part[1]] = 0.5
 
             # show the other parts of the snake on the map
             else:
-                self.map[part[0], part[1]] = 0.5
+                self.map[part[0], part[1]] = 0.25
 
         # show the apple on the map
         self.map[self.apple.location[0], self.apple.location[1]] = 1.
