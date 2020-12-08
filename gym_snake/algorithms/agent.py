@@ -14,7 +14,7 @@ class Agent:
     """
 
     def __init__(self, env: SnakeEnv, long_term_memory_capacity: int = 1_000_000,
-                 min_exp_ratio: float = 0., max_exp_ratio: float = 1.0, decay: float = 0.001, gamma: float = 0.99,
+                 min_exp_ratio: float = 0., max_exp_ratio: float = 1., decay: float = 0.001, gamma: float = 0.99,
                  batch_size: int = 32, number_of_epochs: int = 1,
                  lr: float = 0.00025, rho: float = 0.95, epsilon: float = 0.01):
 
@@ -49,6 +49,9 @@ class Agent:
                            lr=self.lr,
                            rho=self.rho,
                            epsilon=self.epsilon)
+
+        # Count the number of steps
+        self.steps = 0
 
         # Storing learning history
         self.length_history = []
@@ -124,6 +127,8 @@ class Agent:
             state = self.env.reset()
 
             while True:
+                self.steps += 1
+
                 self.update_exploration_ratio()
 
                 action = self.act(state=state, greedy=True)
