@@ -13,8 +13,8 @@ class Agent:
     Experience: (state, action, reward, new_state); get form long term memory
     """
 
-    def __init__(self, env: SnakeEnv, long_term_memory_capacity: int = 1_000_000, short_term_memory_capacity: int = 2,
-                 exploration_fraction: float = 0.15, gamma: float = 0.99,
+    def __init__(self, env: SnakeEnv, long_term_memory_capacity: int = 1_000_000,
+                 min_exp_ratio: float = 0., max_exp_ratio: float = 1.0, decay: float = 0.001, gamma: float = 0.99,
                  batch_size: int = 32, number_of_epochs: int = 1,
                  lr: float = 0.00025, rho: float = 0.95, epsilon: float = 0.01):
 
@@ -25,8 +25,11 @@ class Agent:
         self.long_term_memory_capacity = long_term_memory_capacity
 
         # Reinforcement learning parameters
-        self.exploration_fraction = exploration_fraction  # the probability of exploration
         self.gamma = gamma  # discount parameter
+        self.min_exp_ratio = min_exp_ratio
+        self.max_exp_ratio = max_exp_ratio
+        self.decay = decay
+        self.exploration_ratio = self.max_exp_ratio  # the probability of exploration
 
         # Training parameters
         self.batch_size = batch_size
@@ -57,7 +60,7 @@ class Agent:
         """
 
         # random action
-        if greedy and np.random.rand() < self.exploration_fraction:
+        if greedy and np.random.rand() < self.exploration_ratio:
             return self.env.action_space.sample()
 
         # Best action
@@ -70,6 +73,10 @@ class Agent:
         """
 
         self.long_term_memory.add(experience)
+
+    def update_exploration_ratio(self):
+        self.exploration_ratio = self.min_exp_ratio + \
+                                 (self.max_exp_ratio - self.min_exp_ratio) * np.exp((-1)*self.decay * self.steps)
 
     def replay(self, replay_size: int, verbose: int = 0) -> None:
 
@@ -117,6 +124,8 @@ class Agent:
             state = self.env.reset()
 
             while True:
+                self.update_exploration_ratio()
+
                 action = self.act(state=state, greedy=True)
 
                 new_state, reward, done, info = self.env.step(action)
@@ -134,6 +143,7 @@ class Agent:
                 if done:
                     self.length_history.append(episode_length)
                     self.reward_history.append(total_reward)
+                    print(f"Exploration ratio at the end of the episode: {self.exploration_ratio}")
                     print(f"Episode length: {episode_length}")
                     print(f"Total reward: {total_reward}")
                     break
