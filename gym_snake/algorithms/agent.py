@@ -130,7 +130,6 @@ class Agent:
         self.brain.train(X, y, verbose=verbose)
 
     def learn(self, number_of_episodes: int, replay_size: int, verbose: int = 0):
-
         for episode in range(number_of_episodes):
             print(episode)
 
@@ -162,6 +161,35 @@ class Agent:
                     self.length_history.append(episode_length)
                     self.reward_history.append(total_reward)
                     print(f"Exploration ratio at the end of the episode: {self.exploration_ratio}")
+                    print(f"Episode length: {episode_length}")
+                    print(f"Total reward: {total_reward}")
+                    break
+
+    def play(self, number_of_episodes: int):
+        for episode in range(number_of_episodes):
+            print(episode)
+
+            episode_length = 1
+            total_reward = 0.
+
+            state = self.env.reset()
+
+            while True:
+                self.steps += 1
+
+                action = self.act(state=state, greedy=False)
+
+                new_state, reward, done, info = self.env.step(action)
+
+                state = new_state
+
+                episode_length += 1
+
+                total_reward += reward
+
+                if done:
+                    self.length_history.append(episode_length)
+                    self.reward_history.append(total_reward)
                     print(f"Episode length: {episode_length}")
                     print(f"Total reward: {total_reward}")
                     break
