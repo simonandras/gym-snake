@@ -8,8 +8,10 @@ from gym_snake.utilities.utils import xor, array_in_collection
 class Snake:
 
     def __init__(self, map_shape: tuple, initial_length: int):
+
+        assert initial_length + 1 <= map_shape[0] * map_shape[1], "Snake is too long for this map shape"
+
         self.map_shape = map_shape
-        assert map_shape[0] >= 5 and map_shape[1] >= 5, "The map size should be at least 5x5"
         self.initial_length = initial_length
 
         self.length = None
@@ -30,8 +32,8 @@ class Snake:
         self.snake_body = deque()
 
         # first add the head inside of the border
-        self.snake_body.append(np.array([np.random.randint(2, self.map_shape[0] - 2),
-                                         np.random.randint(2, self.map_shape[1] - 2)]))
+        self.snake_body.append(np.array([np.random.randint(self.map_shape[0]),
+                                         np.random.randint(self.map_shape[1])]))
 
         # adds some valid part connected to the tail
         for _ in range(self.initial_length - 1):
@@ -59,6 +61,10 @@ class Snake:
         if available_positions:
             position = available_positions[np.random.randint(len(available_positions))]
             self.snake_body.append(parts_around[position])
+        else:
+            self.length = len(self.snake_body)
+            print(f"The initial snake is shorter; "
+                  f"starting length: {len(self.snake_body)} instead of {self.initial_length}")
 
     def valid_part(self, part: np.ndarray, to_tail=False) -> bool:
         """
@@ -133,9 +139,12 @@ class Apple:
         self.create()
 
     def create(self):
-        while True:
-            new_location = np.array([np.random.randint(self.map_shape[0]),
-                                     np.random.randint(self.map_shape[1])])
-            if not array_in_collection(self.snake.snake_body, new_location):
-                self.location = new_location
-                break
+        if self.snake.length >= self.map_shape[0] * self.map_shape[1]:
+            raise ValueError("The apple cannot be placed on the map, because there is no more space")
+        else:
+            while True:
+                new_location = np.array([np.random.randint(self.map_shape[0]),
+                                         np.random.randint(self.map_shape[1])])
+                if not array_in_collection(self.snake.snake_body, new_location):
+                    self.location = new_location
+                    break

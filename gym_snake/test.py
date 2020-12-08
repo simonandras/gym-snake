@@ -3,7 +3,7 @@ import numpy as np
 from gym_snake.envs.snake_env import SnakeEnv
 
 
-env = SnakeEnv(shape=(8, 8), initial_snake_length=4, enlargement=10)
+env = SnakeEnv(shape=(2, 2), initial_snake_length=2, enlargement=2)
 observation = env.reset()
 print(observation)
 print("----------------")

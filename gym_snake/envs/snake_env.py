@@ -17,7 +17,7 @@ class SnakeEnv(gym.Env):
 
     def __init__(self, shape: tuple, initial_snake_length: int = 4, enlargement: int = 1):
 
-        assert shape[0] >= 5 and shape[1] >= 5, "The map size should be at least 5x5"
+        assert initial_snake_length + 1 <= shape[0] * shape[1], "Snake is too long for this map shape"
         assert initial_snake_length >= 2, "The initial snake length should be at least 2"
         assert isinstance(enlargement, int), "enlargement should be int"
         assert enlargement > 0, "enlargement should be positive"
@@ -42,18 +42,32 @@ class SnakeEnv(gym.Env):
 
         new_head = self.snake.get_new_head(action)
 
+        # Valid step
         if self.snake.valid_part(new_head):
             tail = self.snake.snake_body.pop()
             self.snake.snake_body.appendleft(new_head)
+
+            # The snake ate the apple
             if np.array_equal(self.apple.location, new_head):
                 self.snake.snake_body.append(tail)  # restore tail
                 self.snake.length += 1  # increase length
-                self.apple.create()
                 reward = 1.
+
+                # The game is won
+                if self.snake.length == self.shape[0] * self.shape[1]:
+                    self.end_episode()
+
+                # The game continues
+                else:
+                    self.apple.create()
+                    self.snake.update_direction()
+                    self.update_map()
+
+            # The snake did not eat the apple
             else:
                 reward = 0.
-            self.snake.update_direction()
-            self.update_map()
+                self.snake.update_direction()
+                self.update_map()
 
         # out of bound or new_head intersects with the other body parts
         else:
