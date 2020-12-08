@@ -14,7 +14,7 @@ class Brain:
         assert len(input_shape) == 3, "input_shape should be 3 dimensional tuple"
 
         # CNN shape parameters
-        self.input_shape = input_shape  # 3d, same as the short term memory output shape (channel first)
+        self.input_shape = input_shape  # 3d, channel first
         self.number_of_actions = number_of_actions
 
         # Training parameters

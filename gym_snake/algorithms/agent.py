@@ -23,7 +23,6 @@ class Agent:
 
         # Memory parameters
         self.long_term_memory_capacity = long_term_memory_capacity
-        self.short_term_memory_capacity = short_term_memory_capacity
 
         # Reinforcement learning parameters
         self.exploration_fraction = exploration_fraction  # the probability of exploration
@@ -39,44 +38,35 @@ class Agent:
         self.epsilon = epsilon
 
         # Create memory and Keras CNN model
-        self.short_term_memory = ShortTermMemory(capacity=self.short_term_memory_capacity,
-                                                 observation_shape=self.env.observation_shape)
         self.long_term_memory = Memory(capacity=self.long_term_memory_capacity)
-        self.brain = Brain(input_shape=self.short_term_memory.memory_shape,
+        self.brain = Brain(input_shape=(1, *self.env.observation_shape),
                            number_of_actions=self.env.action_space.n,
-                           batch_size=self.batch_size, number_of_epochs=self.number_of_epochs,
-                           lr=self.lr, rho=self.rho, epsilon=self.epsilon)
+                           batch_size=self.batch_size,
+                           number_of_epochs=self.number_of_epochs,
+                           lr=self.lr,
+                           rho=self.rho,
+                           epsilon=self.epsilon)
 
         # Storing learning history
         self.length_history = []
         self.reward_history = []
 
-    def act(self, greedy: bool = True) -> int:
+    def act(self, state: np.ndarray, greedy: bool = True) -> int:
         """
-        The state is read from the short term memory
+        The state is a 2d np array
         """
 
         # random action
         if greedy and np.random.rand() < self.exploration_fraction:
             return self.env.action_space.sample()
+
         # Best action
         else:
-            return np.argmax(self.brain.predict_one(self.short_term_memory.state))
-
-    def observe(self, observation: np.ndarray) -> np.ndarray:
-        """
-        observation: k dim, get from the env
-        return: (k + 1) dim, get from the short term memory
-        """
-
-        self.short_term_memory.update(observation)
-
-        return self.short_term_memory.state
+            return np.argmax(self.brain.predict_one(np.array([state])))
 
     def memorize(self, experience: tuple) -> None:
         """
         One experience is stored as (state, action, reward, new_state)
-        state has the short term memory output shape
         """
 
         self.long_term_memory.add(experience)
@@ -84,18 +74,17 @@ class Agent:
     def replay(self, replay_size: int, verbose: int = 0) -> None:
 
         # One experience is stored as (state, action, reward, new_state)
-        # state and new_state has the short term memory output shape
         experiences = self.long_term_memory.sample(number_of_samples=replay_size)
         number_of_experiences = len(experiences)
 
-        states = np.array([i[0] for i in experiences])
+        states = np.array([[i[0]] for i in experiences])
 
-        new_states = np.array([i[3] for i in experiences])
+        new_states = np.array([[i[3]] for i in experiences])
 
         predictions_of_states = self.brain.predict(states)
         predictions_of_new_states = self.brain.predict(new_states)
 
-        X = np.zeros((number_of_experiences, *self.short_term_memory.memory_shape))
+        X = np.zeros((number_of_experiences, *self.brain.input_shape))
         y = np.zeros((number_of_experiences, self.env.action_space.n))
 
         for i in range(number_of_experiences):
@@ -105,9 +94,7 @@ class Agent:
 
             # new_state is terminal state
             # The observation is the zero array in case of termination
-            # The last channel of the state is the last most recent observation
-            # The state has channel first ordering
-            if not np.any(new_state[-1]):
+            if not np.any(new_state[0]):
                 target[action] = reward
 
             # new_state is non-terminal
@@ -127,14 +114,12 @@ class Agent:
             episode_length = 1
             total_reward = 0.
 
-            observation = self.env.reset()
-            state = self.observe(observation)
+            state = self.env.reset()
 
             while True:
-                action = self.act(greedy=True)
+                action = self.act(state=state, greedy=True)
 
-                observation, reward, done, info = self.env.step(action)
-                new_state = self.observe(observation)
+                new_state, reward, done, info = self.env.step(action)
 
                 # store experience
                 self.memorize((state, action, reward, new_state))
@@ -147,8 +132,6 @@ class Agent:
                 total_reward += reward
 
                 if done:
-                    self.short_term_memory.reset()
-
                     self.length_history.append(episode_length)
                     self.reward_history.append(total_reward)
                     print(f"Episode length: {episode_length}")
