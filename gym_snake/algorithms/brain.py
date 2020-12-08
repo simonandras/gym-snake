@@ -40,7 +40,7 @@ class Brain:
                    activation='relu', padding='same',
                    data_format='channels_first')(x)
         x = Flatten()(x)
-        x = Dense(256, activation='relu')(x)
+        x = Dense(256)(x)
         output_x = Dense(3)(x)
 
         model = Model(input_x, output_x)
