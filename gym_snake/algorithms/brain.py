@@ -26,8 +26,10 @@ class Brain:
         self.rho = rho
         self.epsilon = epsilon
 
-        # Create Keras model
+        # Creating Keras models with the same starting weights
         self.model = self.create_model()
+        self.target_model = self.create_model()
+        self.synchronization()
 
     def create_model(self) -> Model:
 
@@ -55,7 +57,14 @@ class Brain:
         self.model.fit(X, y, batch_size=self.batch_size, epochs=self.number_of_epochs, verbose=verbose)
 
     def predict(self, states):
-        return self.model.predict(states)
+        """
+        Using the target model for prediction
+        """
+
+        return self.target_model.predict(states)
 
     def predict_one(self, state):
         return self.predict(np.array([state]))[0]
+
+    def synchronization(self):
+        self.target_model.set_weights(self.model.get_weights())
