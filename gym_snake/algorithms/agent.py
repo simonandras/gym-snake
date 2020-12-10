@@ -129,10 +129,14 @@ class Agent:
 
         self.brain.train(X, y, verbose=verbose)
 
-    def learn(self, number_of_episodes: int, replay_size: int, synchronization_step_number: int = 100,
+    def learn(self, number_of_episodes: int, replay_size: int, synchronization_episode_number: int = 100,
               verbose: int = 0):
         for episode in range(number_of_episodes):
             print(episode)
+
+            if episode % synchronization_episode_number == 0:
+                self.brain.synchronization()
+                print("Target model weights synchronized")
 
             episode_length = 1
             total_reward = 0.
@@ -157,10 +161,6 @@ class Agent:
 
                 episode_length += 1
                 total_reward += reward
-
-                if self.steps % synchronization_step_number == 0:
-                    self.brain.synchronization()
-                    print("Target model weights synchronized")
 
                 if done:
                     self.length_history.append(episode_length)
