@@ -44,9 +44,7 @@ class Agent:
                            number_of_actions=self.env.action_space.n,
                            batch_size=self.batch_size,
                            number_of_epochs=self.number_of_epochs,
-                           lr=self.lr,
-                           rho=self.rho,
-                           epsilon=self.epsilon)
+                           lr=self.lr)
 
         # Count the number of steps
         self.steps = 0
