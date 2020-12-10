@@ -16,8 +16,7 @@ class Agent:
 
     def __init__(self, env: SnakeEnv, long_term_memory_capacity: int = 1_000_000,
                  min_exp_ratio: float = 0., max_exp_ratio: float = 1., decay: float = 0.001, gamma: float = 0.99,
-                 batch_size: int = 32, number_of_epochs: int = 1,
-                 lr: float = 0.00025, rho: float = 0.95, epsilon: float = 0.01):
+                 batch_size: int = 32, number_of_epochs: int = 1, lr: float = 0.00025):
 
         # SnakeEnv
         self.env = env
@@ -36,10 +35,8 @@ class Agent:
         self.batch_size = batch_size
         self.number_of_epochs = number_of_epochs
 
-        # RMSprop parameters
+        # RMSprop learning rate
         self.lr = lr
-        self.rho = rho
-        self.epsilon = epsilon
 
         # Create memory and Keras CNN model
         self.long_term_memory = Memory(capacity=self.long_term_memory_capacity)
@@ -132,11 +129,11 @@ class Agent:
     def learn(self, number_of_episodes: int, replay_size: int, synchronization_episode_number: int = 100,
               verbose: int = 0):
         for episode in range(number_of_episodes):
-            print(episode)
-
             if episode % synchronization_episode_number == 0:
                 self.brain.synchronization()
                 print("Target model weights synchronized")
+
+            print(episode)
 
             episode_length = 1
             total_reward = 0.

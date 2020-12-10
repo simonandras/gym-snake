@@ -1,5 +1,7 @@
 
 import numpy as np
+import tensorflow as tf
+from keras import backend as K
 from tensorflow.keras.layers import Input, Dense, Conv2D, Flatten, BatchNormalization
 from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.models import Model
@@ -8,8 +10,7 @@ from tensorflow.keras.models import Model
 class Brain:
 
     def __init__(self, input_shape: tuple, number_of_actions: int,
-                 batch_size: int, number_of_epochs: int,
-                 lr: float, rho: float, epsilon: float):
+                 batch_size: int, number_of_epochs: int, lr: float,):
 
         assert len(input_shape) == 3, "input_shape should be 3 dimensional tuple"
 
@@ -21,10 +22,8 @@ class Brain:
         self.batch_size = batch_size
         self.number_of_epochs = number_of_epochs
 
-        # RMSprop parameters
+        # RMSprop learning rate
         self.lr = lr
-        self.rho = rho
-        self.epsilon = epsilon
 
         # Creating Keras models with the same starting weights
         self.model = self.create_model()
@@ -46,10 +45,8 @@ class Brain:
         output_x = Dense(3)(x)
 
         model = Model(input_x, output_x)
-        model.compile(optimizer=RMSprop(lr=self.lr,
-                                        rho=self.rho,
-                                        epsilon=self.epsilon),
-                      loss="mean_squared_error")
+        model.compile(optimizer=RMSprop(lr=self.lr),
+                      loss=huber_loss)
 
         return model
 
@@ -68,3 +65,15 @@ class Brain:
 
     def synchronization(self):
         self.target_model.set_weights(self.model.get_weights())
+
+
+def huber_loss(y_true, y_pred):
+    err = y_true - y_pred
+
+    cond = K.abs(err) < 1.
+    L2 = 0.5 * K.square(err)
+    L1 = K.abs(err) - 0.5
+
+    loss = tf.where(cond, L2, L1)
+
+    return K.mean(loss)
