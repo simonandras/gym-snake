@@ -7,13 +7,8 @@ from gym_snake.utilities.utils import rotate_times, mirror
 
 
 class Agent:
-    """
-    Observation: 2d array; get from env
-    State: 3d array; get from short term memory
-    Experience: (state, action, reward, new_state); get form long term memory
-    """
 
-    def __init__(self, env: SnakeEnv, long_term_memory_capacity: int = 1_000_000,
+    def __init__(self, env: SnakeEnv, memory_capacity: int = 1_000_000,
                  min_exp_ratio: float = 0., max_exp_ratio: float = 1., decay: float = 0.001, gamma: float = 0.99,
                  batch_size: int = 32, number_of_epochs: int = 1, lr: float = 0.00025):
 
@@ -21,7 +16,7 @@ class Agent:
         self.env = env
 
         # Memory parameters
-        self.long_term_memory_capacity = long_term_memory_capacity
+        self.memory_capacity = memory_capacity
 
         # Reinforcement learning parameters
         self.gamma = gamma  # discount parameter
@@ -38,12 +33,12 @@ class Agent:
         self.lr = lr
 
         # Create memory and Keras CNN model
-        self.long_term_memory = Memory(capacity=self.long_term_memory_capacity)
         self.brain = Brain(input_shape=(1, *self.env.observation_shape),
                            number_of_actions=self.env.action_space.n,
                            batch_size=self.batch_size,
                            number_of_epochs=self.number_of_epochs,
                            lr=self.lr)
+        self.memory = Memory(capacity=self.memory_capacity)
 
         # Count the number of steps
         self.steps = 0
@@ -71,18 +66,18 @@ class Agent:
         One experience is stored as (state, action, reward, new_state)
         """
 
-        self.long_term_memory.add(experience)
+        self.memory.add(experience)
 
         state, action, reward, new_state = experience
 
         # In case of rotation, the actions do not changes
-        self.long_term_memory.add((rotate_times(state, 1), action, reward, rotate_times(new_state, 1)))
-        self.long_term_memory.add((rotate_times(state, 2), action, reward, rotate_times(new_state, 2)))
-        self.long_term_memory.add((rotate_times(state, 3), action, reward, rotate_times(new_state, 3)))
+        self.memory.add((rotate_times(state, 1), action, reward, rotate_times(new_state, 1)))
+        self.memory.add((rotate_times(state, 2), action, reward, rotate_times(new_state, 2)))
+        self.memory.add((rotate_times(state, 3), action, reward, rotate_times(new_state, 3)))
 
         # In case of mirroring the right and left actions are interchanged
-        self.long_term_memory.add((mirror(state, axis=0), action, 2 - reward, mirror(new_state, axis=0)))
-        self.long_term_memory.add((mirror(state, axis=1), action, 2 - reward, mirror(new_state, axis=1)))
+        self.memory.add((mirror(state, axis=0), action, 2 - reward, mirror(new_state, axis=0)))
+        self.memory.add((mirror(state, axis=1), action, 2 - reward, mirror(new_state, axis=1)))
 
     def update_exploration_ratio(self):
         self.exploration_ratio = self.min_exp_ratio + \
@@ -91,7 +86,7 @@ class Agent:
     def replay(self, replay_size: int, verbose: int = 0) -> None:
 
         # One experience is stored as (state, action, reward, new_state)
-        experiences = self.long_term_memory.sample(number_of_samples=replay_size)
+        experiences = self.memory.sample(number_of_samples=replay_size)
         number_of_experiences = len(experiences)
 
         states = np.array([[i[0]] for i in experiences])

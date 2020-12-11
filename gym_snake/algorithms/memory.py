@@ -1,5 +1,6 @@
 
 import random
+from gym_snake.algorithms.brain import Brain
 
 
 class Memory:
@@ -7,8 +8,9 @@ class Memory:
     The previous experiences are stored and used for training
     """
 
-    def __init__(self, capacity: int):
+    def __init__(self, capacity: int, brain: Brain):
         self.capacity = capacity
+        self.brain = brain
 
         self.experiences = []
         self.priorities = []
