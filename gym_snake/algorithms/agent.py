@@ -83,7 +83,7 @@ class Agent:
     def replay(self, replay_size: int, verbose: int = 0) -> None:
 
         # One experience is stored as (state, action, reward, new_state)
-        experiences = self.memory.sample(number_of_samples=replay_size)
+        experiences = self.memory.sample(number_of_samples=replay_size, using_priorities=True)
         number_of_experiences = len(experiences)
 
         states = np.array([[i[0]] for i in experiences])
@@ -121,6 +121,7 @@ class Agent:
             if episode % synchronization_episode_number == 0:
                 self.brain.synchronization()
                 print("Target model weights synchronized")
+                self.memory.update_priorities(show_progress=True)
 
             print(episode)
 
