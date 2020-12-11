@@ -11,6 +11,7 @@ class Memory:
         self.capacity = capacity
 
         self.experiences = []
+        self.priorities = []
 
     def add(self, experience: tuple) -> None:
         """

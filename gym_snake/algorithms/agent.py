@@ -164,7 +164,8 @@ class Agent:
                     print(f"Total reward: {total_reward}")
                     break
 
-    def play(self, number_of_episodes: int, episode_max_length: int = 100, memorize=False):
+    def play(self, number_of_episodes: int, episode_max_length: int = 100, random=False, memorize=False,
+             show_results=True):
         for episode in range(number_of_episodes):
             print(episode)
 
@@ -174,7 +175,10 @@ class Agent:
             state = self.env.reset()
 
             while True:
-                action = self.act(state=state, greedy=False)
+                if random:
+                    action = self.env.action_space.sample()
+                else:
+                    action = self.act(state=state, greedy=False)
 
                 new_state, reward, done, info = self.env.step(action)
 
@@ -188,9 +192,10 @@ class Agent:
 
                 total_reward += reward
 
-                if done or episode_max_length < episode_length:
+                if memorize and (done or episode_max_length < episode_length):
                     self.length_history.append(episode_length)
                     self.reward_history.append(total_reward)
-                    print(f"Episode length: {episode_length}")
-                    print(f"Total reward: {total_reward}")
+                    if show_results:
+                        print(f"Episode length: {episode_length}")
+                        print(f"Total reward: {total_reward}")
                     break
