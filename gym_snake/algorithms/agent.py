@@ -116,9 +116,13 @@ class Agent:
         self.brain.train(X, y, verbose=verbose)
 
     def learn(self, number_of_episodes: int, replay_size: int, synchronization_episode_number: int = 100,
-              priority_update_episode_number: int = 100, verbose: int = 0):
+              priority_update_episode_number: int = 100, saving_episode_number: int = 100, verbose: int = 0):
 
         for episode in range(number_of_episodes):
+            if episode % saving_episode_number == 0:
+                self.brain.save()
+                print("Model weights saved")
+
             if episode % synchronization_episode_number == 0:
                 self.brain.synchronization()
                 print("Target model weights synchronized")

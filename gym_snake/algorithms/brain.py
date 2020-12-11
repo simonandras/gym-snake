@@ -68,6 +68,10 @@ class Brain:
     def synchronization(self):
         self.target_model.set_weights(self.model.get_weights())
 
+    def save(self):
+        self.model.save_weights('model_weights.h5')
+        self.target_model.save_weights('target_model_weights.h5')
+
 
 def huber_loss(y_true, y_pred):
     err = y_true - y_pred
