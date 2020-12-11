@@ -164,7 +164,7 @@ class Agent:
                     print(f"Total reward: {total_reward}")
                     break
 
-    def play(self, number_of_episodes: int, memorize=False):
+    def play(self, number_of_episodes: int, episode_max_length: int = 100, memorize=False):
         for episode in range(number_of_episodes):
             print(episode)
 
@@ -188,7 +188,7 @@ class Agent:
 
                 total_reward += reward
 
-                if done:
+                if done or episode_max_length < episode_length:
                     self.length_history.append(episode_length)
                     self.reward_history.append(total_reward)
                     print(f"Episode length: {episode_length}")
