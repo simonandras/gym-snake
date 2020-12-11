@@ -65,6 +65,9 @@ class Agent:
     def act(self, state: np.ndarray, greedy: bool = True) -> int:
         """
         The state is a 2d np array
+        greedy:
+            - If True, than the agent is an epsilon-greed agent
+            - Else it is a completely greedy agent (always choosing the best action)
         """
 
         # random action
