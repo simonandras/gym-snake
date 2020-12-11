@@ -3,8 +3,7 @@
 This project contains a snake-game environment based on OpenAI AI gym and a DDQN agent, which can learn to play the game using only image observation of the game.
 
 ## Folders
-
-In the gym_snake forlder is 4 folders: <br>
+The gym_snake forlder contains 4 folders: <br>
 - algorithms: contains the DDQN agent
 - envs: contains the snake-game environment
 - testing: contains the test files
