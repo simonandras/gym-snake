@@ -36,4 +36,6 @@ class Memory:
         self.priorities = []
 
         for experience in self.experiences:
-            pass
+            state, action, reward, new_state = experience
+
+

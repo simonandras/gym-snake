@@ -38,7 +38,7 @@ class Agent:
                            batch_size=self.batch_size,
                            number_of_epochs=self.number_of_epochs,
                            lr=self.lr)
-        self.memory = Memory(capacity=self.memory_capacity)
+        self.memory = Memory(capacity=self.memory_capacity, brain=self.brain)
 
         # Count the number of steps
         self.steps = 0
