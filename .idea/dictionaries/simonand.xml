@@ -2,6 +2,7 @@
   <dictionary name="simonand">
     <words>
       <w>crossentropy</w>
+      <w>ddqn</w>
       <w>envs</w>
       <w>keras</w>
       <w>lmbd</w>

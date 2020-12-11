@@ -9,13 +9,15 @@ class Memory:
     The previous experiences an their priorities are stored and used for training
     """
 
-    def __init__(self, capacity: int, brain: Brain, gamma: float):
+    def __init__(self, capacity: int, using_priority: bool, brain: Brain, gamma: float):
         self.capacity = capacity
+        self.using_priority = using_priority
         self.brain = brain
         self.gamma = gamma
 
         self.experiences = []
-        self.priorities = []
+        if using_priority:
+            self.priorities = []
 
     def add(self, experience: tuple) -> None:
         """
@@ -23,21 +25,21 @@ class Memory:
         """
 
         self.experiences.append(experience)
-        self.priorities.append(self.get_priority(experience))
 
-        if len(self.experiences) != len(self.priorities):
-            raise ValueError
+        if self.using_priority:
+            self.priorities.append(self.get_priority(experience))
+
+            if len(self.experiences) != len(self.priorities):
+                raise ValueError
 
         if len(self.experiences) > self.capacity:
             self.experiences.pop(0)
-            self.priorities.pop(0)
+            if self.using_priority:
+                self.priorities.pop(0)
 
-    def sample(self, number_of_samples: int, using_priorities=False) -> list:
-        """
-        Sampling without replacement
-        """
+    def sample(self, number_of_samples: int) -> list:
 
-        if using_priorities:
+        if self.using_priority:
             temp_priorities = self.priorities.copy()
             n = len(temp_priorities)
             if n != len(self.experiences):
@@ -57,6 +59,9 @@ class Memory:
             return random.sample(self.experiences, min(number_of_samples, len(self.experiences)))
 
     def get_priority(self, experience) -> float:
+        if not self.using_priority:
+            raise ValueError
+
         state, action, reward, new_state = experience
 
         # Q(state, action) prediction using the primary model
@@ -79,6 +84,9 @@ class Memory:
         return error + 0.1
 
     def update_priorities(self, show_progress=True) -> None:
+        if not self.using_priority:
+            raise ValueError
+
         if show_progress:
             print("Updating priorities")
             print(f"Number of experiences: {len(self.experiences)}")
