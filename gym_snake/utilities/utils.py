@@ -83,4 +83,3 @@ def mirror(a: np.ndarray, axis: int) -> np.ndarray:
                 result[i][a.shape[1] - j - 1] = a[i][j]
 
     return result
-

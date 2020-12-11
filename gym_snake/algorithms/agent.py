@@ -1,7 +1,6 @@
 
 import numpy as np
 from gym_snake.envs.snake_env import SnakeEnv
-from gym_snake.algorithms.short_term_memory import ShortTermMemory
 from gym_snake.algorithms.memory import Memory
 from gym_snake.algorithms.brain import Brain
 from gym_snake.utilities.utils import rotate_times, mirror
@@ -165,7 +164,7 @@ class Agent:
                     print(f"Total reward: {total_reward}")
                     break
 
-    def play(self, number_of_episodes: int):
+    def play(self, number_of_episodes: int, memorize=False):
         for episode in range(number_of_episodes):
             print(episode)
 
@@ -178,6 +177,10 @@ class Agent:
                 action = self.act(state=state, greedy=False)
 
                 new_state, reward, done, info = self.env.step(action)
+                
+                # store experience
+                if memorize:
+                    self.memorize((state, action, reward, new_state))
 
                 state = new_state
 
