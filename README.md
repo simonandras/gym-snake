@@ -1,8 +1,15 @@
 # gym-snake
 
-### First Milestone
+This project contains a snake-game environment based on OpenAI AI gym and a DDQN agent, which can learn to play the game using only image observation of the game.
 
-The first milestone was the own OpenAI Gym environment. The content of this is all the files except the files in the "Algorithms" folder. 
-The environment is a snake game environment with adjustable shape. The code documentation is not ready yet. The env can be used as showed in the test.py, but it can be also used with the OpenAI function too: "env = gym.make('snake-v0', shape=(40, 40))".
+## Folders
+The gym_snake forlder contains 4 folders: <br>
+- algorithms: contains the DDQN agent
+- envs: contains the snake-game environment
+- testing: contains the test files
+- utilities: contains utility functions
 
-I plan to implement some agents to the next milestone and compare their performance. 
+### Testing and reproducing the results
+
+The training and testing of the agent on the environment is in the DDQN_agent_test.ipynb file. It can be used without modification on Google Colab. <br>
+The behavior of the snake-game environment is tested in the Environment_test.py. It can be used after downloading and installing the package, like in the DDQN_agent_test.ipynb file.
