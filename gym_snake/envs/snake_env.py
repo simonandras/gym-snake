@@ -66,7 +66,7 @@ class SnakeEnv(gym.Env):
 
             # The snake did not eat the apple
             else:
-                reward = 0.
+                reward = -0.01
                 self.snake.update_direction()
                 self.update_map()
 

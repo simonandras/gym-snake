@@ -177,7 +177,7 @@ class Agent:
                 action = self.act(state=state, greedy=False)
 
                 new_state, reward, done, info = self.env.step(action)
-                
+
                 # store experience
                 if memorize:
                     self.memorize((state, action, reward, new_state))
