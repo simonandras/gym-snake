@@ -12,7 +12,7 @@ The gym_snake forlder contains 4 folders: <br>
 ## Testing and reproducing the results
 
 The training and testing of the agent on the environment is in the DDQN_agent_test.ipynb file. It can be used without modification on Google Colab. <br>
-The behavior of the snake-game environment is tested in the Environment_test.py. It can be used after downloading and installing the package.
+The behavior of the snake-game environment is tested in the environment_test.py. It can be used after downloading and installing the package.
 
 ## Install
 
