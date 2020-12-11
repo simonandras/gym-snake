@@ -68,8 +68,8 @@ class Agent:
 
     def memorize(self, experience: tuple) -> None:
         """
-        Store the experience and its transformations
-        One experience is stored as (state, action, reward, new_state)
+        Store the experience and its transformations (6 experience in total).
+        One experience is stored as (state, action, reward, new_state).
         """
 
         # The actual experience
@@ -133,6 +133,7 @@ class Agent:
                 target[action] = reward + self.gamma * np.max(predictions_of_new_states[i])
 
             X[i] = state
+            print(state.shape)
             y[i] = target
 
         print(X.shape)
