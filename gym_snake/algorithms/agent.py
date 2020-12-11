@@ -42,10 +42,17 @@ class Agent:
         # RMSprop learning rate
         self.lr = lr
 
-        # Create Keras CNN models and memory
-        self.brain = Brain(input_shape=(1, *self.env.observation_shape), number_of_actions=self.env.action_space.n,
-                           batch_size=self.batch_size, number_of_epochs=self.number_of_epochs, lr=self.lr)
-        self.memory = Memory(capacity=self.memory_capacity, using_priority=self.using_priority, brain=self.brain,
+        # Create Keras CNN models
+        self.brain = Brain(input_shape=(1, *self.env.observation_shape),
+                           number_of_actions=self.env.action_space.n,
+                           batch_size=self.batch_size,
+                           number_of_epochs=self.number_of_epochs,
+                           lr=self.lr)
+
+        # Create memory
+        self.memory = Memory(capacity=self.memory_capacity,
+                             using_priority=self.using_priority,
+                             brain=self.brain,
                              gamma=self.gamma)
 
         # Count the number of steps

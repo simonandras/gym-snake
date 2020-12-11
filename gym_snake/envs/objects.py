@@ -9,13 +9,13 @@ class Snake:
 
     def __init__(self, map_shape: tuple, initial_length: int):
 
-        assert initial_length + 1 <= map_shape[0] * map_shape[1], "Snake is too long for this map shape"
+        assert initial_length + 1 <= map_shape[0] * map_shape[1], "Snake is too long for this map"
 
         self.map_shape = map_shape
         self.initial_length = initial_length
 
         self.length = None
-        self.snake_body = None
+        self.snake_body = None  # deque
         self.direction = None
 
         self.reset()
@@ -25,21 +25,21 @@ class Snake:
         Creates a new random snake with the initial_length
         """
 
-        # reset the length
+        # Reset the length
         self.length = self.initial_length
 
-        # clear the snake
+        # Clear the snake
         self.snake_body = deque()
 
-        # first add the head inside of the border
+        # First add the head inside of the border
         self.snake_body.append(np.array([np.random.randint(self.map_shape[0]),
                                          np.random.randint(self.map_shape[1])]))
 
-        # adds some valid part connected to the tail
+        # Adds some valid part connected to the tail
         for _ in range(self.initial_length - 1):
             self.add_random_part_to_tail()
 
-        # reset the direction
+        # Reset the direction
         self.update_direction()
 
     def update_direction(self) -> None:

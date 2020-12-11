@@ -82,6 +82,10 @@ class Brain:
 
 
 def huber_loss(y_true, y_pred):
+    """
+    Huber loss is used instead of the mean squared error in the training
+    """
+
     err = y_true - y_pred
 
     cond = K.abs(err) < 1.
