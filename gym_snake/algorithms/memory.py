@@ -31,3 +31,9 @@ class Memory:
         """
         
         return random.sample(self.experiences, min(number_of_samples, len(self.experiences)))
+
+    def update_priorities(self):
+        self.priorities = []
+
+        for experience in self.experiences:
+            pass
