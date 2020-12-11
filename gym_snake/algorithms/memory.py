@@ -56,10 +56,17 @@ class Memory:
 
         return error + 0.1
 
-    def update_priorities(self):
+    def update_priorities(self, show_progress=True):
+        if show_progress:
+            print("Updating priorities")
+            print(f"Number of experiences: {len(self.experiences)}")
+
         self.priorities = []
 
-        for experience in self.experiences:
+        for i, experience in enumerate(self.experiences):
+            if show_progress and i % 100 == 0:
+                print(i)
+                
             self.priorities.append(self.get_priority(experience))
 
         sum_priorities = sum(self.priorities)
