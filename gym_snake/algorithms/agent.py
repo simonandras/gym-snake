@@ -33,12 +33,9 @@ class Agent:
         self.lr = lr
 
         # Create memory and Keras CNN model
-        self.brain = Brain(input_shape=(1, *self.env.observation_shape),
-                           number_of_actions=self.env.action_space.n,
-                           batch_size=self.batch_size,
-                           number_of_epochs=self.number_of_epochs,
-                           lr=self.lr)
-        self.memory = Memory(capacity=self.memory_capacity, brain=self.brain)
+        self.brain = Brain(input_shape=(1, *self.env.observation_shape), number_of_actions=self.env.action_space.n,
+                           batch_size=self.batch_size, number_of_epochs=self.number_of_epochs, lr=self.lr)
+        self.memory = Memory(capacity=self.memory_capacity, brain=self.brain, gamma=self.gamma)
 
         # Count the number of steps
         self.steps = 0
