@@ -56,15 +56,14 @@ class Brain:
     def train(self, X, y, verbose: int = 0):
         self.model.fit(X, y, batch_size=self.batch_size, epochs=self.number_of_epochs, verbose=verbose)
 
-    def predict(self, states):
-        """
-        Using the target model for prediction
-        """
+    def predict(self, states, target=True):
+        if target:
+            return self.target_model.predict(states)
+        else:
+            return self.model.predict(states)
 
-        return self.target_model.predict(states)
-
-    def predict_one(self, state):
-        return self.predict(np.array([state]))[0]
+    def predict_one(self, state, target=True):
+        return self.predict(np.array([state]), target)[0]
 
     def synchronization(self):
         self.target_model.set_weights(self.model.get_weights())

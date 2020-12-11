@@ -64,7 +64,7 @@ class Agent:
 
         # Best action
         else:
-            return np.argmax(self.brain.predict_one(np.array([state])))
+            return np.argmax(self.brain.predict_one(np.array([state]), target=False))
 
     def memorize(self, experience: tuple) -> None:
         """
