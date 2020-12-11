@@ -25,8 +25,8 @@ If using Google Colab, then just run te first code cell of the DDQN_agent_test.i
 
 ### Using locally
 
-If using locally, then for first download the package with the command: <br>
+If using locally, then for first download the package with the command: <br> <br>
 git clone --single-branch --branch CNN https://github.com/simonandras/gym-snake <br>
-than go into the downloaded folder (gym-snake) and use pip to install: <br>
-pip install -e . <br>
+than go into the downloaded folder (gym-snake) and use pip to install: <br> <br>
+pip install -e . <br> <br>
 The packages in the setup.py file should be installed to use this package.
