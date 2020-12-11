@@ -115,7 +115,6 @@ class Agent:
 
         # Initialize the training data
         X = np.zeros((number_of_experiences, *self.brain.input_shape))
-        print(X)
         print(X.shape)
         y = np.zeros((number_of_experiences, self.env.action_space.n))
 
@@ -136,7 +135,6 @@ class Agent:
             X[i] = state
             y[i] = target
 
-        print(X)
         print(X.shape)
 
         self.brain.train(X, y, verbose=verbose)
