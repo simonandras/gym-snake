@@ -18,7 +18,10 @@ The behavior of the snake-game environment is tested in the Environment_test.py.
 
 ### using Google Colab
 
-If using Google Colab, then just run te first code cell of the DDQN_agent_test.ipynb file. <br>
+If using Google Colab, then just run te first code cell of the DDQN_agent_test.ipynb file: <br>
+!git clone --single-branch --branch CNN https://github.com/simonandras/gym-snake <br>
+%cd gym-snake/ <br>
+!pip install -e . <br>
 
 ### Using locally
 
