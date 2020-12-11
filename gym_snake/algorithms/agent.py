@@ -115,12 +115,12 @@ class Agent:
 
         # Initialize the training data
         X = np.zeros((number_of_experiences, *self.brain.input_shape))
-        print(X.shape)
         y = np.zeros((number_of_experiences, self.env.action_space.n))
 
         for i in range(number_of_experiences):
             state, action, reward, new_state = experiences[i]
 
+            # Only the value at the action index will be changed
             target = predictions_of_states[i]
 
             # new_state is terminal state
@@ -128,16 +128,14 @@ class Agent:
             if not np.any(new_state):
                 target[action] = reward
 
-            # new_state is non-terminal
+            # new_state is non-terminal state
             else:
                 target[action] = reward + self.gamma * np.max(predictions_of_new_states[i])
 
             X[i] = state
-            print(state.shape)
             y[i] = target
 
-        print(X.shape)
-
+        # Train the primary model
         self.brain.train(X, y, verbose=verbose)
 
     def learn(self, number_of_episodes: int, replay_size: int, synchronization_episode_number: int = 100,
