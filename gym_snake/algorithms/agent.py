@@ -103,7 +103,7 @@ class Agent:
 
             # new_state is terminal state
             # The observation is the zero array in case of termination
-            if not np.any(new_state[0]):
+            if not np.any(new_state):
                 target[action] = reward
 
             # new_state is non-terminal

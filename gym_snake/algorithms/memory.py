@@ -47,7 +47,10 @@ class Memory:
         q_ = self.brain.predict_one(np.array([new_state]), target=True)[a]
 
         # Target value
-        t = reward + self.gamma * q_
+        if not np.any(new_state):  # new_state is terminal state
+            t = reward
+        else:  
+            t = reward + self.gamma * q_
 
         error = np.abs(q - t)
 
