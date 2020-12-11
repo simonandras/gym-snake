@@ -49,7 +49,7 @@ class Memory:
         # Target value
         if not np.any(new_state):  # new_state is terminal state
             t = reward
-        else:  
+        else:
             t = reward + self.gamma * q_
 
         error = np.abs(q - t)
@@ -60,7 +60,7 @@ class Memory:
         self.priorities = []
 
         for experience in self.experiences:
-            self.priorities.append(self.get_priorty(experience))
+            self.priorities.append(self.get_priority(experience))
 
         sum_priorities = sum(self.priorities)
 
