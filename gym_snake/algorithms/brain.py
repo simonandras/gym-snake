@@ -8,6 +8,11 @@ from tensorflow.keras.models import Model
 
 
 class Brain:
+    """
+    Contains 2 CNN models for the DDQN agent. Using Keras framework.
+    RMSprop is used as optimizer.
+    Huber loss is used instead of the mean squared error in the training.
+    """
 
     def __init__(self, input_shape: tuple, number_of_actions: int,
                  batch_size: int, number_of_epochs: int, lr: float,):
@@ -31,7 +36,6 @@ class Brain:
         self.synchronization()
 
     def create_model(self) -> Model:
-
         input_x = Input(shape=self.input_shape)
 
         x = Conv2D(32, kernel_size=8, strides=(4, 4),
@@ -66,6 +70,10 @@ class Brain:
         return self.predict(np.array([state]), target)[0]
 
     def synchronization(self):
+        """
+        Loads the weights of the primary model to the target model
+        """
+
         self.target_model.set_weights(self.model.get_weights())
 
     def save(self):

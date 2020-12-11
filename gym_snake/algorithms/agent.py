@@ -13,6 +13,8 @@ class Agent:
         - Environment: SnakeEnv
         - Brain: double convolutional neural network
         - Memory: for replaying experiences
+    If using_priority is True, then prioritized experience replay is used. This functionality is in an experimental
+    state for now. It works, but it runs too slow and should not be used.
     """
 
     def __init__(self, env: SnakeEnv, memory_capacity: int = 1_000_000, using_priority: bool = False,
