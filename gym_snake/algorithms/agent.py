@@ -175,8 +175,6 @@ class Agent:
             state = self.env.reset()
 
             while True:
-                self.steps += 1
-
                 action = self.act(state=state, greedy=False)
 
                 new_state, reward, done, info = self.env.step(action)

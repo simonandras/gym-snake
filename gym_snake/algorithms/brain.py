@@ -34,15 +34,18 @@ class Brain:
 
         input_x = Input(shape=self.input_shape)
 
-        x = Conv2D(16, kernel_size=8, strides=(4, 4),
+        x = Conv2D(32, kernel_size=8, strides=(4, 4),
                    activation='relu', padding='same',
                    data_format='channels_first')(input_x)
-        x = Conv2D(32, kernel_size=4, strides=(2, 2),
+        x = Conv2D(64, kernel_size=4, strides=(2, 2),
+                   activation='relu', padding='same',
+                   data_format='channels_first')(x)
+        x = Conv2D(64, kernel_size=3,
                    activation='relu', padding='same',
                    data_format='channels_first')(x)
         x = Flatten()(x)
-        x = Dense(256)(x)
-        output_x = Dense(3)(x)
+        x = Dense(512, activation='relu')(x)
+        output_x = Dense(self.number_of_actions, activation='linear')(x)
 
         model = Model(input_x, output_x)
         model.compile(optimizer=RMSprop(lr=self.lr),
